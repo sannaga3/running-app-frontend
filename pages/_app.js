@@ -1,7 +1,24 @@
-import '../styles/globals.css'
+import Head from "next/head";
+import Layout from "../components/Layout/layout";
+import "../styles/globals.css";
+import { RecoilRoot } from "recoil";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+const MyApp = (props) => {
+  const { Component, pageProps } = props;
 
-export default MyApp
+  return (
+    <RecoilRoot>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        />
+      </Head>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </RecoilRoot>
+  );
+};
+
+export default MyApp;

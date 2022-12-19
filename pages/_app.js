@@ -1,7 +1,12 @@
 import Head from "next/head";
-import Layout from "../components/Layout/layout";
+// import Layout from "../components/Layout/layout";
 import "../styles/globals.css";
 import { RecoilRoot } from "recoil";
+import dynamic from "next/dynamic";
+
+const Layout = dynamic(() => import("../components/Layout/layout"), {
+  ssr: false,
+});
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;

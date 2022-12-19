@@ -1,16 +1,19 @@
 const flashMessage = ({ flashMessage }) => {
-  const successColor = "teal-500";
-  const errorColor = "red-700";
+  const successColor = "border-teal-500 text-teal-500";
+  const errorColor = "border-red-700 text-red-700";
   const color =
-    flashMessage && flashMessage.type === "success" ? successColor : errorColor;
+    flashMessage?.type && flashMessage.type === "success"
+      ? successColor
+      : errorColor;
 
   return (
     <>
-      {flashMessage && Object.keys(flashMessage).length > 0 && (
-        <div className={`border-2 border-${color} p-3 mb-4`}>
-          <p className={`text-${color}`}>{flashMessage.message}</p>
-        </div>
-      )}
+      {flashMessage?.message &&
+        Object.keys(flashMessage.message).length > 0 && (
+          <div className={`border-2 ${color} p-3 mb-4`}>
+            <p>{flashMessage.message}</p>
+          </div>
+        )}
     </>
   );
 };

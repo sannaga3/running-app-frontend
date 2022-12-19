@@ -1,11 +1,15 @@
 import { React, useState } from "react";
-import Link from "next/link";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import NavLink from "./navLink";
+import { userState } from "../../states/auth";
 
 const header = () => {
   const [activeTab, setActiveTab] = useState("login");
   const [isHamburger, setIsHamburger] = useState(true);
   const [windowWidth, setWindowWidth] = useState(null);
+  const user = useRecoilValue(userState);
+  const setUser = useSetRecoilState(userState);
 
   globalThis.window?.addEventListener(
     "resize",
@@ -15,19 +19,18 @@ const header = () => {
     true
   );
 
-  let isShowHamburger =
-    windowWidth < 768 === false ? "hidden" : "flex flex-col";
+  windowWidth < 768 === false ? "hidden" : "flex flex-col";
 
   return (
     <header className="py-2 border-b-2 border-orange-600">
       <div className="flex flex-row justify-between items-center px-12 md:justify-around md:px-0">
         <div className="animate-rotateY border-2 border-orange-600 rounded-full shadow-xl bg-white">
           <div className="border-2 bg-orange-600 rounded-full p-2">
-            <Link href="/">
+            <a href={`${user.id ? `/user/${user.id}` : "/login"}`}>
               <div className="text-white text-lg w-32 h-1 mb-6 ml-4">
                 running-app
               </div>
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -41,22 +44,43 @@ const header = () => {
             <div className="w-5 h-1 text-center text-orange-600 pb-2">__</div>
           </div>
         </div>
-        {((isShowHamburger && isHamburger) || windowWidth > 768) && (
+        {(isHamburger || windowWidth > 768) && (
           <div
             className={`absolute flex flex-col top-14 right-20 bg-gray-800 rounded-md opacity-70 text-white space-y-3 pt-2 px-5 z-50 md:flex-row md:space-x-16 md:space-y-0 md:static md:text-black md:bg-inherit`}
           >
-            <NavLink
-              to="/login"
-              tabName="login"
-              active={activeTab}
-              setActiveTab={setActiveTab}
-            />
-            <NavLink
-              to="/signup"
-              tabName="signup"
-              active={activeTab}
-              setActiveTab={setActiveTab}
-            />
+            {user.id ? (
+              <>
+                <NavLink
+                  href={`/user/${user.id}`}
+                  tabName="プロフィール"
+                  active={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+                <NavLink
+                  href="/login"
+                  tabName="ログアウト"
+                  active={activeTab}
+                  setActiveTab={setActiveTab}
+                  isLogout={true}
+                  setUser={setUser}
+                />
+              </>
+            ) : (
+              <>
+                <NavLink
+                  href="/login"
+                  tabName="ログイン"
+                  active={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+                <NavLink
+                  href="/signup"
+                  tabName="サインアップ"
+                  active={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+              </>
+            )}
           </div>
         )}
       </div>

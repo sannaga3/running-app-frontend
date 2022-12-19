@@ -1,6 +1,9 @@
+import { useState } from "react";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 import Input from "../components/atoms/input";
 import Button from "../components/atoms/button";
@@ -8,11 +11,13 @@ import FormError from "../components/messages/formError";
 import FlashMessage from "../components/messages/flashMessage";
 import { loginUser } from "./api/auth";
 import { userState } from "../states/auth";
-import { useState } from "react";
 
 const login = () => {
+  const router = useRouter();
   const [user, setUser] = useRecoilState(userState);
   const [flashMessage, setFlashMessage] = useState(null);
+
+  if (!user.id) Cookies.remove("token");
 
   const {
     register,
@@ -21,10 +26,8 @@ const login = () => {
     getValues,
   } = useForm({
     defaultValues: {
-      name: null,
       email: null,
       password: null,
-      password_confirm: null,
     },
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -49,7 +52,13 @@ const login = () => {
 
     setUser(setData);
 
-    // window.location.href = "/";
+    router.push({
+      pathname: `/user/${setData.id}`,
+      query: {
+        type: "success",
+        message: "ログインしました",
+      },
+    });
   };
 
   return (
@@ -62,7 +71,7 @@ const login = () => {
       <div className="flexCol items-center">
         <div className="pageTitle">ログイン</div>
         <FormError errors={errors} />
-        <FlashMessage flashMessage={flashMessage} />
+        <FlashMessage flashMessage={flashMessage ?? router.query} />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flexCol items-center space-y-2"

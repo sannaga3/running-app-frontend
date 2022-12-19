@@ -22,3 +22,25 @@ export const loginUser = async (identifier, password) => {
 
   return data;
 };
+
+export const signupUser = async (username, email, password) => {
+  const res = await fetch(`${API_URL}/api/auth/local/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: username,
+      email: email,
+      password: password,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (data.user) {
+    Cookies.set("token", data.jwt, { expires: 7 });
+  }
+
+  return data;
+};

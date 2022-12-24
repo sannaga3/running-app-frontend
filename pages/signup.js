@@ -59,7 +59,7 @@ const signup = () => {
     setUser(setData);
 
     router.push({
-      pathname: `/user/${setData.id}`,
+      pathname: `/users/${setData.id}`,
       query: {
         type: "success",
         message: "ログインしました",

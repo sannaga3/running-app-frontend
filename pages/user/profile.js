@@ -1,19 +1,52 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 
 import Button from "../../components/atoms/button";
 import FlashMessage from "../../components/messages/flashMessage";
+import { destroyUser } from "../api/user";
+import { useRecoilState } from "recoil";
+import { userState } from "../../states/auth";
 
-const profile = ({ user, isEdit, setIsEdit }) => {
+const profile = ({ isEdit, setIsEdit }) => {
   const router = useRouter();
+  const [user, setUser] = useRecoilState(userState);
+  const [error, setError] = useState(null);
 
   const contentAreaStyle =
     "flex justify-center space-x-10 border-b-4 border-gray-400 px-20 py-2";
   const contentWidth = { width: "200px" };
 
+  const deleteUser = async () => {
+    if (window.confirm("アカウントを削除しますか？")) {
+      const res = await destroyUser(user.id);
+
+      if (res.ok) {
+        setUser({
+          id: null,
+          username: null,
+          email: null,
+        });
+
+        return router.push({
+          pathname: `/login`,
+          query: {
+            type: "success",
+            message: "アカウントを削除しました。ご利用ありがとうございました。",
+          },
+        });
+      } else {
+        setError({
+          type: "error",
+          message: "アカウントの削除に失敗しました",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <div className="flexCol items-center">
-        <FlashMessage flashMessage={router.query} />
+        <FlashMessage flashMessage={error ?? router.query} />
       </div>
       <div className="flex justify-center space-x-8">
         <div className="flexCol items-center space-y-5 text-xl font-bold text-gray-500">
@@ -37,6 +70,7 @@ const profile = ({ user, isEdit, setIsEdit }) => {
           />
           <Button
             text="削除"
+            onclick={() => deleteUser()}
             type="submit"
             color="red"
             width="120px"

@@ -23,3 +23,18 @@ export const editUser = async (username, email, password) => {
   if (res.ok) return { ...params };
   return { error: true };
 };
+
+export const destroyUser = async (id) => {
+  const token = Cookies.get("token");
+
+  const res = await fetch(`${API_URL}/api/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.ok) return res;
+  return { error: true };
+};

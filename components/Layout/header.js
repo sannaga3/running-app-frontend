@@ -51,8 +51,14 @@ const header = () => {
             {user.id ? (
               <>
                 <NavLink
-                  href={`/user/${user.id}`}
+                  href={`/users/${user.id}`}
                   tabName="プロフィール"
+                  active={activeTab}
+                  setActiveTab={setActiveTab}
+                />
+                <NavLink
+                  href="/records"
+                  tabName="記録一覧"
                   active={activeTab}
                   setActiveTab={setActiveTab}
                 />

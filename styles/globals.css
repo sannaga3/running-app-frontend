@@ -25,3 +25,7 @@
 .btn-red {
   @apply border-none text-white bg-red-500 hover:bg-red-600;
 }
+
+.btn-primary {
+  @apply border-none text-white bg-blue-500 hover:bg-blue-600;
+}

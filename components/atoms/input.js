@@ -1,7 +1,11 @@
 const input = ({
   label,
+  isNotLabel = false,
   name,
   type,
+  step = null,
+  min,
+  max,
   register,
   required = false,
   minLen,
@@ -17,9 +21,11 @@ const input = ({
 
   return (
     <div className="flex items-center space-y-3">
-      <label className="text-lg mt-0.5" style={labelWidth}>
-        {label}
-      </label>
+      {!isNotLabel && (
+        <label className="text-lg mt-0.5" style={labelWidth}>
+          {label}
+        </label>
+      )}
       <input
         {...register(name, {
           required: { value: required, message: `${label}を入力してください` },
@@ -41,6 +47,9 @@ const input = ({
           },
         })}
         type={type}
+        min={min}
+        max={max}
+        step={step}
         className={`input mb-3`}
         style={inputWidth}
       />

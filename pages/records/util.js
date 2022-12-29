@@ -1,5 +1,7 @@
 // 1kmあたりの時間を算出する
 export const calcPerKmTime = (time, distance) => {
+  if (time === "00:00:00") return "00:00:00";
+
   // 時間を「時・分・秒」の配列に変換 00:02:20 => ['00','02','20']
   const timeArr = time.split(":");
 

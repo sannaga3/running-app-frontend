@@ -68,7 +68,7 @@ const editUserForm = ({ isEdit, setIsEdit }) => {
     setIsEdit(false);
 
     router.push({
-      pathname: `/user/${user.id}`,
+      pathname: `/users/${user.id}`,
       query: {
         type: "success",
         message: "ユーザー情報を更新しました",

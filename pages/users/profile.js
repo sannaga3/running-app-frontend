@@ -63,14 +63,14 @@ const profile = ({ isEdit, setIsEdit }) => {
           <Button
             text="編集"
             type="button"
-            onclick={() => setIsEdit(!isEdit)}
+            onClick={() => setIsEdit(!isEdit)}
             color="amber"
             width="120px"
             height="35px"
           />
           <Button
             text="削除"
-            onclick={() => deleteUser()}
+            onClick={() => deleteUser()}
             type="submit"
             color="red"
             width="120px"

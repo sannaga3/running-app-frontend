@@ -15,7 +15,7 @@
 }
 
 .btn {
-  @apply px-4 py-1 border rounded-full hover:scale-105;
+  @apply px-2 py-1 border rounded-full hover:scale-105;
 }
 
 .btn-amber {

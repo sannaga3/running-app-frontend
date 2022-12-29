@@ -5,10 +5,11 @@ import { Table } from "reactstrap";
 import { useRouter } from "next/router";
 
 import { myRecordListState } from "../../states/record";
-import { getMyRecordList } from "../api/record";
+import { destroyRecord, getMyRecordList } from "../api/record";
 import { userState } from "../../states/auth";
 import EditRecordForm from "./editRecordForm";
 import StoreRecordForm from "./storeRecordForm";
+import Button from "../../components/atoms/button";
 
 const recordList = () => {
   const router = useRouter();
@@ -60,6 +61,32 @@ const recordList = () => {
     }
   };
 
+  const deleteRecord = async (recordId) => {
+    if (window.confirm("記録を削除しますか？")) {
+      const res = await destroyRecord(recordId);
+
+      if (res.ok) {
+        const index = myRecordList.data.findIndex(
+          (record) => record.id === res.id
+        );
+        const CopiedRecordList = structuredClone(myRecordList);
+        CopiedRecordList.data.splice(index, 1);
+
+        setMyRecordList(CopiedRecordList);
+        setEditRecord(null);
+
+        setFlashMessage({
+          type: "success",
+          message: "レコードを削除しました",
+        });
+      } else {
+        setFlashMessage({
+          type: "error",
+          message: "レコードの削除に失敗しました",
+        });
+      }
+    }
+  };
   return (
     <>
       <Head>
@@ -97,6 +124,7 @@ const recordList = () => {
                 <th>時間</th>
                 <th>時間／km</th>
                 <th>歩数</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -109,12 +137,23 @@ const recordList = () => {
                     }}
                     className={editRecord?.id === record.id ? listStyle : ""}
                   >
-                    <td>{record.id}</td>
-                    <td>{record.date}</td>
-                    <td>{record.distance} km</td>
-                    <td>{record.time}</td>
-                    <td>{record.per_time}</td>
-                    <td>{record.step}</td>
+                    <td className="align-middle">{record.id}</td>
+                    <td className="align-middle">{record.date}</td>
+                    <td className="align-middle">{record.distance} km</td>
+                    <td className="align-middle">{record.time}</td>
+                    <td className="align-middle">{record.per_time}</td>
+                    <td className="align-middle">{record.step}</td>
+                    <td className="w-16 px-0">
+                      <Button
+                        text="削除"
+                        type="submit"
+                        width="40px"
+                        textSize="sm"
+                        onClick={() => deleteRecord(record.id)}
+                        useDefaultClass={false}
+                        classProps="text-rose-500 font-weight-bold align-middle mr-4 hover:scale-110 focus:outline-none"
+                      />
+                    </td>
                   </tr>
                 ))}
             </tbody>

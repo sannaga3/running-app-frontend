@@ -103,3 +103,23 @@ const convertRecord = (record) => {
 
   return converted;
 };
+
+/*
+  destroyRecord
+*/
+export const destroyRecord = async (id) => {
+  const token = Cookies.get("token");
+
+  const res = await fetch(`${API_URL}/api/records/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  res.id = id;
+
+  if (res.ok) return res;
+  return { error: true };
+};

@@ -128,7 +128,7 @@ const editUserForm = ({ isEdit, setIsEdit }) => {
           <Button
             text="中止"
             type="button"
-            onclick={() => setIsEdit(!isEdit)}
+            onClick={() => setIsEdit(!isEdit)}
             color="red"
             width="120px"
             height="35px"

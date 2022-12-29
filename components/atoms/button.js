@@ -1,13 +1,22 @@
-const button = ({ text, type, onclick, color, width, height }) => {
+const button = ({
+  text,
+  type,
+  onClick,
+  color,
+  width,
+  height,
+  textSize = "md",
+  useDefaultClass = true,
+  classProps = "",
+}) => {
   const size = { width: width, height: height };
 
+  const buttonStyle = useDefaultClass
+    ? `btn btn-${color} text-${textSize} ${classProps}`
+    : classProps;
+
   return (
-    <button
-      onClick={onclick}
-      type={type}
-      style={size}
-      className={`btn btn-${color}`}
-    >
+    <button onClick={onClick} type={type} style={size} className={buttonStyle}>
       {text}
     </button>
   );

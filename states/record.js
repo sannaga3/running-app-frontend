@@ -6,3 +6,9 @@ export const myRecordListState = atom({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const failureRowListState = atom({
+  key: "failureRowListState",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});

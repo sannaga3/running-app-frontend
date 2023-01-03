@@ -88,14 +88,25 @@ const recordList = () => {
     }
   };
   return (
-    <>
+    <div className="relative z-0">
       <Head>
-        <title>プロフィール</title>
+        <title>記録一覧</title>
         <meta name="description" content="user profile page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flexCol items-center">
-        <p className="pageTitle">記録一覧</p>
+      <div className="absolute top-0 right-0">
+        <Button
+          text="インポート"
+          type="button"
+          color="neutral"
+          width="100px"
+          height="35px"
+          onClick={() =>
+            router.push({
+              pathname: `/records/import_csv`,
+            })
+          }
+        />
       </div>
       <div className="flex justify-center">
         {editRecord && !router.query?.method ? (
@@ -160,7 +171,7 @@ const recordList = () => {
           </Table>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

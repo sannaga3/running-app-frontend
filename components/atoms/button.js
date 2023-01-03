@@ -8,6 +8,7 @@ const button = ({
   textSize = "md",
   useDefaultClass = true,
   classProps = "",
+  disabled = "",
 }) => {
   const size = { width: width, height: height };
 
@@ -16,7 +17,13 @@ const button = ({
     : classProps;
 
   return (
-    <button onClick={onClick} type={type} style={size} className={buttonStyle}>
+    <button
+      onClick={onClick}
+      type={type}
+      style={size}
+      className={buttonStyle}
+      disabled={disabled}
+    >
       {text}
     </button>
   );

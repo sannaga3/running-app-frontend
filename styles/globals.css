@@ -29,3 +29,7 @@
 .btn-primary {
   @apply border-none text-white bg-blue-500 hover:bg-blue-600;
 }
+
+.btn-neutral {
+  @apply border-none text-white bg-neutral-500 hover:bg-neutral-600;
+}

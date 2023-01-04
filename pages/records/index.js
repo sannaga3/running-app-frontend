@@ -135,6 +135,7 @@ const recordList = () => {
                 <th>時間</th>
                 <th>時間／km</th>
                 <th>歩数</th>
+                <th>cal</th>
                 <th></th>
               </tr>
             </thead>
@@ -154,6 +155,7 @@ const recordList = () => {
                     <td className="align-middle">{record.time}</td>
                     <td className="align-middle">{record.per_time}</td>
                     <td className="align-middle">{record.step}</td>
+                    <td className="align-middle">{record.cal}</td>
                     <td className="w-16 px-0">
                       <Button
                         text="削除"

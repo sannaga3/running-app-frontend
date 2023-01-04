@@ -21,6 +21,7 @@ const importCsv = () => {
     "distance",
     "time",
     "per_time",
+    "cal",
     "step",
   ];
   const requiredColumns = ["date", "distance", "time"];
@@ -74,6 +75,7 @@ const importCsv = () => {
     if (column === "time") selected = { time: index, text: text };
     if (column === "per_time") selected = { per_time: index, text: text };
     if (column === "step") selected = { step: index, text: text };
+    if (column === "cal") selected = { cal: index, text: text };
 
     setSelectedColumns([...selectedColumns, selected]);
   };
@@ -124,13 +126,14 @@ const importCsv = () => {
         date: dayjs(recordColumnArr[paramIndexObj.date]).format("YYYY-MM-DD"),
         distance: Number(recordColumnArr[paramIndexObj.distance]),
         time: recordColumnArr[paramIndexObj.time],
-        step: Number(recordColumnArr[paramIndexObj?.step]) ?? null,
         per_time: isCheckPerTime
           ? recordColumnArr[paramIndexObj?.per_time]
           : calcPerKmTime(
               recordColumnArr[paramIndexObj.time],
               Number(recordColumnArr[paramIndexObj.distance])
             ),
+        step: Number(recordColumnArr[paramIndexObj?.step]) ?? 0,
+        cal: Number(recordColumnArr[paramIndexObj?.cal]) ?? 0,
         user_id: user.id,
       };
 

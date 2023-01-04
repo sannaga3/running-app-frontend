@@ -29,17 +29,19 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
       distance: 0,
       time: "00:00:00",
       step: 0,
+      cal: 0,
     },
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 
   const onSubmit = async () => {
-    let [date, distance, time, step] = getValues([
+    let [date, distance, time, step, cal] = getValues([
       "date",
       "distance",
       "time",
       "step",
+      "cal",
     ]);
 
     const per_time = calcPerKmTime(time, distance);
@@ -50,6 +52,7 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
       time: time,
       per_time: per_time,
       step: Number(step),
+      cal: Number(cal),
       user_id: user.id,
     };
 
@@ -86,10 +89,11 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
       <FormError errors={errors} />
       <div className="flex space-x-5 font-weight-bold">
         <div className="w-[150px] text-center">日付</div>
-        <div className="w-[150px] text-center">距離</div>
+        <div className="w-[100px] text-center">距離</div>
         <div className="w-[150px] text-center">時間</div>
-        <div className="w-[150px] text-center">歩数</div>
-        <div className="w-[150px] text-center"></div>
+        <div className="w-[100px] text-center">歩数</div>
+        <div className="w-[100px] text-center">cal</div>
+        <div className="w-[100px] text-center"></div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex space-x-5">
@@ -107,11 +111,11 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
             name="distance"
             type="number"
             min="0"
-            step="0.1"
+            step="0.01"
             register={register}
             isNotLabel={true}
             required={true}
-            inputSize="150px"
+            inputSize="100px"
           />
           <Input
             label="時間"
@@ -131,13 +135,23 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
             register={register}
             isNotLabel={true}
             required={false}
-            inputSize="150px"
+            inputSize="100px"
+          />
+          <Input
+            label="cal"
+            name="cal"
+            type="number"
+            min="0"
+            register={register}
+            isNotLabel={true}
+            required={false}
+            inputSize="100px"
           />
           <Button
             text="作成"
             type="submit"
             color="primary"
-            width="120px"
+            width="100px"
             height="35px"
           />
         </div>

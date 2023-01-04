@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import Head from "next/head";
 import { Table } from "reactstrap";
 import { useRouter } from "next/router";
+import ReactPaginate from "react-paginate";
 
 import { myRecordListState } from "../../states/record";
 import { destroyRecord, getMyRecordList } from "../api/record";
@@ -10,6 +11,7 @@ import { userState } from "../../states/auth";
 import EditRecordForm from "./editRecordForm";
 import StoreRecordForm from "./storeRecordForm";
 import Button from "../../components/atoms/button";
+import SelectBox from "../../components/atoms/selectBox";
 
 const recordList = () => {
   const router = useRouter();
@@ -18,9 +20,11 @@ const recordList = () => {
   const [myRecordList, setMyRecordList] = useRecoilState(myRecordListState);
   const [editRecord, setEditRecord] = useState(null);
   const [listStyle, setListStyle] = useState(null);
+  const [selectedValue] = useState(25);
+  const linkStyle = "w-5 mx-2 px-3 rounded-full text-white";
 
-  const getRecords = async () => {
-    const res = await getMyRecordList(user.id);
+  const getRecords = async (meta = null) => {
+    const res = await getMyRecordList(user.id, meta);
 
     if (res.error) {
       return setFlashMessage({
@@ -87,6 +91,24 @@ const recordList = () => {
       }
     }
   };
+
+  const pageChange = (pageData) => {
+    const pageNumber = pageData["selected"] + 1;
+    const meta = {
+      page: pageNumber,
+      pageSize: myRecordList.meta.pagination.pageSize,
+    };
+    getRecords(meta);
+  };
+
+  const handleSelect = (pageSize) => {
+    const meta = {
+      page: 1,
+      pageSize: pageSize,
+    };
+    getRecords(meta);
+  };
+
   return (
     <div className="relative z-0">
       <Head>
@@ -94,6 +116,7 @@ const recordList = () => {
         <meta name="description" content="user profile page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="pageTitle">記録一覧</div>
       <div className="absolute top-0 right-0">
         <Button
           text="インポート"
@@ -124,10 +147,52 @@ const recordList = () => {
           />
         )}
       </div>
+      <div className="flex justify-center relative mb-2">
+        <ReactPaginate
+          pageCount={Math.ceil(
+            myRecordList.meta.pagination.total /
+              myRecordList.meta.pagination.pageSize
+          )}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={5}
+          onPageChange={(e) => pageChange(e)}
+          // コンテナ
+          containerClassName="w-1/3 h-10 flex justify-center items-center rounded-full mb-3"
+          // ページ番号
+          pageClassName=""
+          pageLinkClassName={`${linkStyle} bg-gray-700 py-1`}
+          activeClassName="font-weight-bold"
+          activeLinkClassName={`${linkStyle} bg-gray-700 py-1 font-weight-bold text-xl scale-110`}
+          // 次・前
+          previousClassName="mb-0.5"
+          nextClassName="mb-0.5"
+          previousLabel={"<"}
+          previousLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
+          nextLabel={">"}
+          nextLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
+          // その他
+          disabledClassName="disabled" //先頭 or 末尾の設定
+          breakLabel="..." // 数値を表示しない部分
+          breakClassName="mb-0.5"
+          breakLinkClassName={`${linkStyle} bg-gray-700 pb-1`}
+        />
+        <div className="absolute -top-7 right-0">
+          <SelectBox
+            header={["表示数"]}
+            importColumns={[10, 25, 50, 100]}
+            handleSelect={handleSelect}
+            selectedValue={selectedValue}
+            wrapperStyleProp="w-24 text-md"
+            labelStyleProp="w-full h-8 bg-gray-700 text-white text-center rounded-t-lg pt-1"
+            selectStyleProp="w-full h-8 text-center border-2 border-gray-700 rounded-b-lg focus:outline-none"
+            optionStyleProp=""
+          />
+        </div>
+      </div>
       {myRecordList?.data.length > 0 && (
-        <div className="border-4 border-gray-300">
+        <div className="border-4 border-gray-400 rounded-xl">
           <Table>
-            <thead>
+            <thead className="border-b-4 border-gray-400 rounded-xl">
               <tr>
                 <th>ID</th>
                 <th>日付</th>

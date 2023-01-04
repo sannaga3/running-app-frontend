@@ -5,19 +5,20 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 /*
   myRecordList
 */
-export const getMyRecordList = async (userId) => {
+export const getMyRecordList = async (userId, meta = null) => {
   const token = Cookies.get("token");
 
-  const res = await fetch(
-    `${API_URL}/api/records?filters[user_id][$eq]=${userId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const url = meta
+    ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}`
+    : `${API_URL}/api/records?filters[user_id][$eq]=${userId}`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (res.ok) {
     let recordList = await res.json();

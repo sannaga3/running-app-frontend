@@ -12,3 +12,17 @@ export const failureRowListState = atom({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const recordSortState = atom({
+  key: "recordSortState",
+  default: [
+    { name: "id", sort: null },
+    { name: "date", sort: "desc" },
+    { name: "distance", sort: null },
+    { name: "time", sort: null },
+    { name: "per_time", sort: null },
+    { name: "step", sort: null },
+    { name: "cal", sort: null },
+  ],
+  effects_UNSTABLE: [persistAtom],
+});

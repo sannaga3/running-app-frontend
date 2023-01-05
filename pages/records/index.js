@@ -8,10 +8,12 @@ import ReactPaginate from "react-paginate";
 import { myRecordListState } from "../../states/record";
 import { destroyRecord, getMyRecordList } from "../api/record";
 import { userState } from "../../states/auth";
+import { recordSortState } from "../../states/record";
 import EditRecordForm from "./editRecordForm";
 import StoreRecordForm from "./storeRecordForm";
 import Button from "../../components/atoms/button";
 import SelectBox from "../../components/atoms/selectBox";
+import SortButton from "../../components/atoms/sortButton";
 
 const recordList = () => {
   const router = useRouter();
@@ -21,10 +23,12 @@ const recordList = () => {
   const [editRecord, setEditRecord] = useState(null);
   const [listStyle, setListStyle] = useState(null);
   const [selectedValue] = useState(25);
+  const [sortItems, setSortItems] = useRecoilState(recordSortState);
   const linkStyle = "w-5 mx-2 px-3 rounded-full text-white";
 
-  const getRecords = async (meta = null) => {
-    const res = await getMyRecordList(user.id, meta);
+  const getRecords = async (meta, sortItems) => {
+    const sortable = sortItems.filter((item) => item.sort !== null);
+    const res = await getMyRecordList(user.id, meta, sortable);
 
     if (res.error) {
       return setFlashMessage({
@@ -37,8 +41,14 @@ const recordList = () => {
   };
 
   useEffect(() => {
-    getRecords();
-  }, []);
+    getRecords(
+      {
+        page: 1,
+        pageSize: myRecordList.meta.pagination.pageSize,
+      },
+      sortItems
+    );
+  }, [sortItems]);
 
   useEffect(() => {
     if (editRecord && !router.query?.method)
@@ -98,7 +108,7 @@ const recordList = () => {
       page: pageNumber,
       pageSize: myRecordList.meta.pagination.pageSize,
     };
-    getRecords(meta);
+    getRecords(meta, sortItems);
   };
 
   const handleSelect = (pageSize) => {
@@ -106,7 +116,7 @@ const recordList = () => {
       page: 1,
       pageSize: pageSize,
     };
-    getRecords(meta);
+    getRecords(meta, sortItems);
   };
 
   return (
@@ -188,19 +198,85 @@ const recordList = () => {
             optionStyleProp=""
           />
         </div>
+        <div className="absolute right-32 flex items-end">
+          <div className="mr-2 font-weight-bold">並替えリセット</div>
+          <div
+            className="w-4 h-7 text-xs text-center border-2 border-black rounded-full cursor-pointer pt-1 hover:scale-110"
+            onClick={() =>
+              setSortItems([
+                { name: "id", sort: null },
+                { name: "date", sort: "desc" },
+                { name: "distance", sort: null },
+                { name: "time", sort: null },
+                { name: "per_time", sort: null },
+                { name: "step", sort: null },
+                { name: "cal", sort: null },
+              ])
+            }
+          ></div>
+        </div>
       </div>
       {myRecordList?.data.length > 0 && (
         <div className="border-4 border-gray-400 rounded-xl">
           <Table>
             <thead className="border-b-4 border-gray-400 rounded-xl">
               <tr>
-                <th>ID</th>
-                <th>日付</th>
-                <th>距離</th>
-                <th>時間</th>
-                <th>時間／km</th>
-                <th>歩数</th>
-                <th>cal</th>
+                <th>
+                  ID
+                  <SortButton
+                    column="id"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  日付
+                  <SortButton
+                    column="date"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  距離
+                  <SortButton
+                    column="distance"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  時間
+                  <SortButton
+                    column="time"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  時間／km
+                  <SortButton
+                    column="per_time"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  歩数
+                  <SortButton
+                    column="step"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
+                <th>
+                  cal
+                  <SortButton
+                    column="cal"
+                    sortItems={sortItems}
+                    setSortItems={setSortItems}
+                  />
+                </th>
                 <th></th>
               </tr>
             </thead>

@@ -5,12 +5,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 /*
   myRecordList
 */
-export const getMyRecordList = async (userId, meta = null) => {
+export const getMyRecordList = async (userId, meta, sortParams) => {
   const token = Cookies.get("token");
 
-  const url = meta
-    ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}`
-    : `${API_URL}/api/records?filters[user_id][$eq]=${userId}`;
+  let sortQuery = "";
+  sortParams.forEach((item, index) => {
+    sortQuery = sortQuery + `&sort[${index}]=${item.name}%3A${item.sort}`;
+  });
+
+  const url = `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}${sortQuery}`;
 
   const res = await fetch(url, {
     method: "GET",

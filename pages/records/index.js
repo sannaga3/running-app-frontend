@@ -5,12 +5,16 @@ import { Table } from "reactstrap";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 
-import { myRecordListState } from "../../states/record";
+import {
+  myRecordListState,
+  recordSortState,
+  recordSearchState,
+} from "../../states/record";
 import { destroyRecord, getMyRecordList } from "../api/record";
 import { userState } from "../../states/auth";
-import { recordSortState } from "../../states/record";
 import EditRecordForm from "./editRecordForm";
 import StoreRecordForm from "./storeRecordForm";
+import SearchRecordForm from "./searchRecordForm";
 import Button from "../../components/atoms/button";
 import SelectBox from "../../components/atoms/selectBox";
 import SortButton from "../../components/atoms/sortButton";
@@ -24,11 +28,30 @@ const recordList = () => {
   const [listStyle, setListStyle] = useState(null);
   const [selectedValue] = useState(25);
   const [sortItems, setSortItems] = useRecoilState(recordSortState);
+  const [isSearchModal, setIsSearchModal] = useState(false);
+  const searchFormValues = useRecoilValue(recordSearchState);
   const linkStyle = "w-5 mx-2 px-3 rounded-full text-white";
 
-  const getRecords = async (meta, sortItems) => {
+  const getRecords = async (meta) => {
     const sortable = sortItems.filter((item) => item.sort !== null);
-    const res = await getMyRecordList(user.id, meta, sortable);
+
+    const formValuesArr = Object.entries(searchFormValues).map(
+      ([key, value]) => ({
+        key,
+        value,
+      })
+    );
+
+    const existValueParams = formValuesArr.filter(
+      (item) => item.value !== null
+    );
+
+    const res = await getMyRecordList(
+      user.id,
+      meta,
+      sortable,
+      existValueParams
+    );
 
     if (res.error) {
       return setFlashMessage({
@@ -41,14 +64,11 @@ const recordList = () => {
   };
 
   useEffect(() => {
-    getRecords(
-      {
-        page: 1,
-        pageSize: myRecordList.meta.pagination.pageSize,
-      },
-      sortItems
-    );
-  }, [sortItems]);
+    getRecords({
+      page: 1,
+      pageSize: myRecordList.meta.pagination.pageSize,
+    });
+  }, [searchFormValues]);
 
   useEffect(() => {
     if (editRecord && !router.query?.method)
@@ -108,7 +128,7 @@ const recordList = () => {
       page: pageNumber,
       pageSize: myRecordList.meta.pagination.pageSize,
     };
-    getRecords(meta, sortItems);
+    getRecords(meta);
   };
 
   const handleSelect = (pageSize) => {
@@ -157,6 +177,13 @@ const recordList = () => {
           />
         )}
       </div>
+      <div className="flex justify-center">
+        <SearchRecordForm
+          isSearchModal={isSearchModal}
+          setIsSearchModal={setIsSearchModal}
+        />
+      </div>
+
       <div className="flex justify-center relative mb-2">
         <ReactPaginate
           pageCount={Math.ceil(

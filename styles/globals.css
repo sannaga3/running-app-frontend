@@ -5,6 +5,9 @@
 .pageTitle {
   @apply text-3xl font-bold text-center mb-7;
 }
+.pageSecondTitle {
+  @apply text-2xl font-bold text-center;
+}
 
 .flexCol {
   @apply flex flex-col;

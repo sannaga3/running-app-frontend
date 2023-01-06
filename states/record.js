@@ -26,3 +26,28 @@ export const recordSortState = atom({
   ],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const searchDefaultState = {
+  id_min: null,
+  id_max: null,
+  date_min: null,
+  date_max: null,
+  distance_min: null,
+  distance_max: null,
+  time_min: null,
+  time_max: null,
+  per_time_min: null,
+  per_time_max: null,
+  step_min: null,
+  step_max: null,
+  cal_min: null,
+  cal_max: null,
+};
+
+export const recordSearchState = atom({
+  key: "recordSearchState",
+  default: {
+    ...searchDefaultState,
+  },
+  effects_UNSTABLE: [persistAtom],
+});

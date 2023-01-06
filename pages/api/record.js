@@ -5,15 +5,30 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 /*
   myRecordList
 */
-export const getMyRecordList = async (userId, meta, sortParams) => {
+export const getMyRecordList = async (
+  userId,
+  meta,
+  sortParams = null,
+  searchParams = null
+) => {
   const token = Cookies.get("token");
 
-  let sortQuery = "";
-  sortParams.forEach((item, index) => {
-    sortQuery = sortQuery + `&sort[${index}]=${item.name}%3A${item.sort}`;
-  });
+  let searchQuery = "";
+  if (searchParams) {
+    searchParams.forEach((param) => {
+      const column = param.key;
 
-  const url = `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}${sortQuery}`;
+      searchQuery =
+        searchQuery +
+        `&filters[${column.slice(0, -4)}]
+        [${param.key.includes("min") ? "$gte" : "$lte"}]=${param.value}`;
+    });
+  }
+
+  const url =
+    searchQuery === ""
+      ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=date%3Adesc`
+      : `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}${searchQuery}`;
 
   const res = await fetch(url, {
     method: "GET",

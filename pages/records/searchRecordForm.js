@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 
@@ -25,7 +24,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
   });
 
   const onSubmit = async () => {
-    const [
+    let [
       id_min,
       id_max,
       date_min,
@@ -57,11 +56,14 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
       "cal_max",
     ]);
 
+    if (date_min === "") date_min = null;
+    if (date_max === "") date_max = null;
+
     const newFormValue = {
       id_min: id_min ? Number(id_min) : null,
       id_max: id_max ? Number(id_max) : null,
-      date_min: date_min ?? null,
-      date_max: date_max ?? null,
+      date_min: date_min,
+      date_max: date_max,
       distance_min: distance_min ? Number(distance_min) : null,
       distance_max: distance_max ? Number(distance_max) : null,
       time_min: time_min,

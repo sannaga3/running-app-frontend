@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { sortRecord } from "../records/util";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,8 +28,8 @@ export const getMyRecordList = async (
 
   const url =
     searchQuery === ""
-      ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=date%3Adesc`
-      : `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}${searchQuery}`;
+      ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=id%3Adesc`
+      : `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=id%3Adesc&${searchQuery}`;
 
   const res = await fetch(url, {
     method: "GET",
@@ -46,9 +47,12 @@ export const getMyRecordList = async (
       return converted;
     });
 
-    recordList.data = convertedList.sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
+    if (sortParams.length > 0) {
+      const sortedList = sortRecord(convertedList, sortParams);
+      recordList.data = sortedList;
+    } else {
+      recordList.data = convertedList;
+    }
 
     return recordList;
   }

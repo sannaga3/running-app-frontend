@@ -26,7 +26,7 @@ const recordList = () => {
   const [myRecordList, setMyRecordList] = useRecoilState(myRecordListState);
   const [editRecord, setEditRecord] = useState(null);
   const [listStyle, setListStyle] = useState(null);
-  const [selectedValue] = useState(25);
+  const [selectedValue] = useState(myRecordList.meta.pagination.pageSize ?? 25);
   const [sortItems, setSortItems] = useRecoilState(recordSortState);
   const [isSearchModal, setIsSearchModal] = useState(false);
   const searchFormValues = useRecoilValue(recordSearchState);
@@ -68,7 +68,7 @@ const recordList = () => {
       page: 1,
       pageSize: myRecordList.meta.pagination.pageSize,
     });
-  }, [searchFormValues]);
+  }, [sortItems, searchFormValues]);
 
   useEffect(() => {
     if (editRecord && !router.query?.method)
@@ -134,7 +134,7 @@ const recordList = () => {
   const handleSelect = (pageSize) => {
     const meta = {
       page: 1,
-      pageSize: pageSize,
+      pageSize: Number(pageSize),
     };
     getRecords(meta, sortItems);
   };
@@ -216,7 +216,7 @@ const recordList = () => {
         <div className="absolute -top-7 right-0">
           <SelectBox
             header={["表示数"]}
-            importColumns={[10, 25, 50, 100]}
+            importColumns={[10, 25, 50, 100, 150, 300, 500]}
             handleSelect={handleSelect}
             selectedValue={selectedValue}
             wrapperStyleProp="w-24 text-md"

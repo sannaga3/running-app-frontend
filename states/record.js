@@ -17,7 +17,7 @@ export const recordSortState = atom({
   key: "recordSortState",
   default: [
     { name: "id", sort: null },
-    { name: "date", sort: "desc" },
+    { name: "date", sort: null },
     { name: "distance", sort: null },
     { name: "time", sort: null },
     { name: "per_time", sort: null },

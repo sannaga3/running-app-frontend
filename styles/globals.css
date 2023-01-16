@@ -25,6 +25,10 @@
   @apply border-none text-white bg-amber-500 hover:bg-amber-600;
 }
 
+.btn-orange {
+  @apply border-none text-white bg-orange-500 hover:bg-orange-600;
+}
+
 .btn-red {
   @apply border-none text-white bg-red-500 hover:bg-red-600;
 }

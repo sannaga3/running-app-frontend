@@ -51,3 +51,29 @@ export const recordSearchState = atom({
   },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const defaultTotalFormState = {
+  totalPeriodType: "per_month",
+  date_min: null,
+  date_max: null,
+  targetColumns: ["date"],
+  options: [],
+};
+
+export const recordTotalFormState = atom({
+  key: "recordTotalState",
+  default: {
+    ...defaultTotalFormState,
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const totalRecordListState = atom({
+  key: "totalRecordListState",
+  default: [],
+});
+
+export const totalResultState = atom({
+  key: "totalResultState",
+  default: [],
+});

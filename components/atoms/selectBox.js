@@ -1,22 +1,21 @@
 const selectBox = ({
-  header,
-  importColumns,
-  selectedColumns,
+  label,
+  name,
+  selectableValues,
   handleSelect,
+  selectedValues = [],
   selectedValue = null,
   wrapperStyleProp = null,
   labelStyleProp = null,
   selectStyleProp = null,
   optionStyleProp = null,
 }) => {
-  const wrapperStyle =
-    wrapperStyleProp ?? "grid grid-cols-12 gap-1 content-center mb-3";
   const labelStyle = labelStyleProp ?? "border-b-2 border-gray-600";
   const selectStyle = selectStyleProp ?? "w-full";
   const optionStyle = optionStyleProp ?? "focus:outline-none";
 
   const handleDisabled = (column) => {
-    const targetIndex = selectedColumns.filter(
+    const targetIndex = selectedValues.filter(
       (item) => Object.keys(item)[0] === column
     );
 
@@ -25,37 +24,34 @@ const selectBox = ({
   };
 
   return (
-    <div className={wrapperStyle}>
-      {header.map((text) => {
-        return (
-          <div
-            className={
-              !wrapperStyleProp ? "col-span-2 border-2 border-gray-600" : ""
-            }
-            key={text}
-          >
-            <div className={labelStyle}>{text}</div>
-            <select
-              onChange={(e) => handleSelect(e.target.value, text)}
-              className={selectStyle}
-              defaultValue={selectedValue}
+    <div
+      className={
+        wrapperStyleProp
+          ? wrapperStyleProp
+          : "col-span-2 border-2 border-gray-600"
+      }
+      key={label}
+    >
+      <div className={labelStyle}>{label}</div>
+      <select
+        name={name}
+        onChange={(e) => handleSelect(e.target.value, label)}
+        className={selectStyle}
+        defaultValue={selectedValue}
+      >
+        {selectableValues.map((value) => {
+          return (
+            <option
+              value={value}
+              key={value}
+              className={optionStyle}
+              disabled={selectedValues && handleDisabled(value)}
             >
-              {importColumns.map((column) => {
-                return (
-                  <option
-                    value={column}
-                    key={column}
-                    className={optionStyle}
-                    disabled={selectedColumns && handleDisabled(column)}
-                  >
-                    {column}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        );
-      })}
+              {value}
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 };

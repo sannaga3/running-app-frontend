@@ -13,6 +13,9 @@ const input = ({
   getValues,
   getValueKey,
   trigger = null,
+  wrapperClassProp = null,
+  labelClassProp = null,
+  inputClassProp = null,
   labelSize = "200px",
   inputSize = "200px",
 }) => {
@@ -20,9 +23,16 @@ const input = ({
   const inputWidth = { width: inputSize };
 
   return (
-    <div className="flex items-center space-y-3">
+    <div
+      className={
+        wrapperClassProp ? wrapperClassProp : "flex items-center space-y-3"
+      }
+    >
       {!isNotLabel && (
-        <label className="text-lg mt-0.5" style={labelWidth}>
+        <label
+          className={labelClassProp ? labelClassProp : "text-lg mt-0.5"}
+          style={labelWidth}
+        >
           {label}
         </label>
       )}
@@ -50,7 +60,7 @@ const input = ({
         min={min}
         max={max}
         step={step}
-        className={`input mb-3`}
+        className={inputClassProp ? inputClassProp : "input mb-3"}
         style={inputWidth}
       />
     </div>

@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { sortRecord } from "../records/util";
+import dayjs from "dayjs";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -145,4 +146,60 @@ export const destroyRecord = async (id) => {
 
   if (res.ok) return res;
   return { error: true };
+};
+
+/*
+  myTotalRecordList
+*/
+export const getMyTotalRecordList = async (formValues) => {
+  const token = Cookies.get("token");
+
+  let params = { ...formValues };
+
+  params = convertTotalPeriodAndChangeLimit(params);
+
+  const res = await fetch(`${API_URL}/api/records/findTotalRecords`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ ...params }),
+  });
+
+  if (res.ok) {
+    const recordList = await res.json();
+    return recordList;
+  }
+
+  return { error: true };
+};
+
+// 集計期間と取得レコード数のパラメータ設定
+const convertTotalPeriodAndChangeLimit = (params) => {
+  if (params.totalPeriodType === "per_month") {
+    params.limit = 31;
+
+    const dateElements = params.date_min.split("-");
+
+    params.date_max = dayjs(params.date_min)
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
+    params.date_min = `${dateElements[0]}-${dateElements[1]}-01`;
+  } else if (params.totalPeriodType === "per_year") {
+    params.limit = 500;
+
+    const dateElements = params.date_min.split("-");
+
+    params.date_max = dayjs(params.date_min).endOf("year").format("YYYY-MM-DD");
+    params.date_min = `${dateElements[0]}-01-01`;
+  } else if (params.totalPeriodType === "custom_settings") {
+    params.limit = 500;
+
+    params.date_max = dayjs(params.date_max).format("YYYY-MM-DD");
+    params.date_min = dayjs(params.date_min).format("YYYY-MM-DD");
+  }
+
+  return params;
 };

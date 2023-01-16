@@ -131,7 +131,7 @@ const recordList = () => {
     getRecords(meta);
   };
 
-  const handleSelect = (pageSize) => {
+  const handleSelect = (e) => {
     const meta = {
       page: 1,
       pageSize: Number(pageSize),
@@ -215,14 +215,13 @@ const recordList = () => {
         />
         <div className="absolute -top-7 right-0">
           <SelectBox
-            header={["表示数"]}
-            importColumns={[10, 25, 50, 100, 150, 300, 500]}
+            label={["表示数"]}
+            selectableValues={[10, 25, 50, 100, 150, 300, 500]}
             handleSelect={handleSelect}
             selectedValue={selectedValue}
             wrapperStyleProp="w-24 text-md"
             labelStyleProp="w-full h-8 bg-gray-700 text-white text-center rounded-t-lg pt-1"
             selectStyleProp="w-full h-8 text-center border-2 border-gray-700 rounded-b-lg focus:outline-none"
-            optionStyleProp=""
           />
         </div>
         <div className="absolute right-32 flex items-end">
@@ -244,7 +243,21 @@ const recordList = () => {
         </div>
       </div>
       {myRecordList?.data.length > 0 && (
-        <div className="border-4 border-gray-400 rounded-xl">
+        <div className="border-4 border-gray-400 rounded-xl relative">
+          <div className="absolute top-2.5 right-2">
+            <Button
+              text="集計"
+              type="button"
+              color="orange"
+              width="90px"
+              height="35px"
+              onClick={() =>
+                router.push({
+                  pathname: `/records/total_records`,
+                })
+              }
+            />
+          </div>
           <Table>
             <thead className="border-b-4 border-gray-400 rounded-xl">
               <tr>

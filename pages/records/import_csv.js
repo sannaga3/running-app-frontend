@@ -162,14 +162,18 @@ const importCsv = () => {
             onChange={(e) => handleCsv(e)}
           />
         </div>
-        {header && (
-          <SelectBox
-            header={header}
-            importColumns={importColumns}
-            selectedColumns={selectedColumns}
-            handleSelect={handleSelect}
-          />
-        )}
+        <div className="grid grid-cols-12 gap-3 content-center mb-3">
+          {header &&
+            header.map((item) => (
+              <SelectBox
+                key={item}
+                label={item}
+                selectableValues={importColumns}
+                selectedValues={selectedColumns}
+                handleSelect={handleSelect}
+              />
+            ))}
+        </div>
         <Button
           text="実行"
           type="button"

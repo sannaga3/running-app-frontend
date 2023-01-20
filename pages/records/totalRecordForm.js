@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-import TotalDataList from "./totalDataList";
+import TotalResult from "./totalResult";
 import Input from "../../components/atoms/input";
 import Button from "../../components/atoms/button";
 import FormError from "../../components/messages/formError";
@@ -242,7 +242,7 @@ const totalRecordForm = () => {
         />
       </div>
       {totalResult?.dataArr?.length > 0 && (
-        <TotalDataList
+        <TotalResult
           totalRecordList={totalRecordList}
           dataArr={totalResult.dataArr}
           checkableTargetColumns={checkableTargetColumns}

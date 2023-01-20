@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { Table } from "reactstrap";
 
 import SelectBox from "../../components/atoms/selectBox";
 import { sortRecord } from "./util";
 import { recordTotalFormState } from "../../states/record";
+import TotalResultRecords from "./totalResultRecords";
+import TotalResultGraph from "./totalResultGraph";
 
-const TotalDataList = ({
-  totalRecordList,
-  dataArr,
-  checkableTargetColumns,
-}) => {
+const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
   const formValues = useRecoilValue(recordTotalFormState);
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [limit, setLimit] = useState(1);
-  let recordListKeys;
+  const [limit, setLimit] = useState(5);
+  const [displayFormat, setDisplayFormat] = useState("リスト");
+  let recordColumns;
   let selectedList;
 
   const totalTableStyle =
     "w-[150px] text-right font-weight-bold border-dashed border-b-2 border-gray-600";
+
+  const selectBoxStyle =
+    "w-full h-6 text-center border-2 border-gray-700 rounded-lg focus:outline-none";
 
   const convertHeader = (key) => {
     let converted;
@@ -50,8 +51,12 @@ const TotalDataList = ({
     return target && target?.label;
   };
 
-  const handleSelectLimit = (number, _) => {
+  const handleSelectLimit = (number) => {
     setLimit(number);
+  };
+
+  const handleSelectDisplayFormat = (format) => {
+    setDisplayFormat(format);
   };
 
   if (selectedColumn && selectedOption) {
@@ -62,22 +67,14 @@ const TotalDataList = ({
     const sortedList = sortRecord(copiedList, [sortParam]);
     selectedList = sortedList.slice(0, limit);
 
-    recordListKeys = Object.keys(selectedList[0]).map((value) => {
+    recordColumns = Object.keys(selectedList[0]).map((value) => {
       const target = checkableTargetColumns.find(
         (column) => column.value === value
       );
       return target ?? null;
     });
-    recordListKeys = recordListKeys.filter((item) => item !== null);
+    recordColumns = recordColumns.filter((item) => item !== null);
   }
-
-  const handleValue = (item) => {
-    const key = item[0];
-
-    if (key === "time" || key === "per_time") return item[1].slice(0, -4);
-    else if (key === "distance") return `${item[1]} km`;
-    return item[1];
-  };
 
   return (
     <div className="flexCol items-center border-2 border-gray-700 rounded-xl mb-5 pt-2">
@@ -136,7 +133,7 @@ const TotalDataList = ({
           ))}
         </div>
       </div>
-      <div className="text-xl font-weight-bold mb-3">レコード検索</div>
+      <div className="text-xl font-weight-bold mb-3">集計詳細</div>
       <div className="flex space-x-5 mb-3">
         <div className="w-[200px] border-b-2 border-gray-600">
           <span className="font-weight-bold mr-3 pb-1">対象カラム:</span>
@@ -150,58 +147,60 @@ const TotalDataList = ({
           <span>表示数:</span>
           <SelectBox
             name="limit"
-            selectableValues={[1, 2, 3, 5, 10]}
+            selectableValues={[1, 2, 3, 5, 15, 31]}
             selectedValue={limit}
             handleSelect={handleSelectLimit}
             wrapperStyleProp="w-[80px]"
             labelStyleProp=""
-            selectStyleProp="w-full h-6 text-center border-2 border-gray-700 rounded-lg focus:outline-none"
+            selectStyleProp={`${selectBoxStyle}`}
+          />
+        </div>
+        <div className="flex space-x-3 border-b-2 border-gray-600 pb-1">
+          <span>表示形式:</span>
+          <SelectBox
+            name="displayFormat"
+            selectableValues={["リスト", "グラフ"]}
+            selectedValue={displayFormat}
+            handleSelect={handleSelectDisplayFormat}
+            wrapperStyleProp="w-[80px]"
+            labelStyleProp=""
+            selectStyleProp={`${selectBoxStyle} text-sm`}
           />
         </div>
       </div>
       <div>
         {selectedColumn && selectedOption && (
-          <div className="border-4 border-gray-400 rounded-xl mb-3">
-            <Table>
-              <thead className="border-b-4 border-gray-400 rounded-xl">
-                <tr>
-                  <th className="w-[100px]">ID</th>
-                  <th className="w-[150px]">日付</th>
-                  {recordListKeys.map((column) => (
-                    <th
-                      className={`w-[120px] ${
-                        column.value === selectedColumn ? "text-orange-500" : ""
-                      }`}
-                    >
-                      {column.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {selectedList.map((record) => {
-                  const recordArr = Object.entries(record);
-                  return (
-                    <tr key={record.id}>
-                      {recordArr.map((item) => (
-                        <td
-                          className={`${
-                            selectedColumn === item[0] ? "text-orange-500" : ""
-                          }`}
-                        >
-                          {handleValue(item)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </div>
+          <>
+            {displayFormat === "リスト" ? (
+              <TotalResultRecords
+                columns={recordColumns}
+                records={selectedList}
+                selectedColumn={selectedColumn}
+              />
+            ) : (
+              <>
+                {selectedColumn !== "time" && selectedColumn !== "per_time" ? (
+                  <div className="mt-3">
+                    <TotalResultGraph
+                      records={selectedList}
+                      selectedColumn={selectedColumn}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    style={{ width: "800px", height: "400px" }}
+                    className="text-3xl text-center flexCol justify-center"
+                  >
+                    <div>グラフ表示できません</div>
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 };
 
-export default TotalDataList;
+export default totalResult;

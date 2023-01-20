@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import TotalResult from "./totalResult";
 import Input from "../../components/atoms/input";
 import Button from "../../components/atoms/button";
 import FormError from "../../components/messages/formError";
@@ -11,17 +10,16 @@ import CheckBox from "../../components/atoms/checkBox";
 import {
   recordTotalFormState,
   defaultTotalFormState,
-  totalResultState,
   totalRecordListState,
+  totalResultState,
 } from "../../states/record";
 import { getMyTotalRecordList } from "../api/record";
 import { userState } from "../../states/auth";
 
-const totalRecordForm = () => {
+const totalRecordForm = ({ checkableTargetColumns }) => {
   const user = useRecoilValue(userState);
-  const [totalResult, setTotalResult] = useRecoilState(totalResultState);
-  const [totalRecordList, setTotalRecordList] =
-    useRecoilState(totalRecordListState);
+  const setTotalResult = useSetRecoilState(totalResultState);
+  const setTotalRecordList = useSetRecoilState(totalRecordListState);
   const [formValues, setFormValues] = useRecoilState(recordTotalFormState);
   const selectable = [
     {
@@ -41,28 +39,6 @@ const totalRecordForm = () => {
     formValues.totalPeriodType ?? "per_month"
   );
 
-  const checkableTargetColumns = [
-    {
-      label: "距離",
-      value: "distance",
-    },
-    {
-      label: "時間",
-      value: "time",
-    },
-    {
-      label: "時間／km",
-      value: "per_time",
-    },
-    {
-      label: "歩数",
-      value: "step",
-    },
-    {
-      label: "cal",
-      value: "cal",
-    },
-  ];
   const [targetColumns, setTargetColumns] = useState(
     formValues.targetColumns ?? []
   );
@@ -241,13 +217,6 @@ const totalRecordForm = () => {
           }}
         />
       </div>
-      {totalResult?.dataArr?.length > 0 && (
-        <TotalResult
-          totalRecordList={totalRecordList}
-          dataArr={totalResult.dataArr}
-          checkableTargetColumns={checkableTargetColumns}
-        />
-      )}
     </>
   );
 };

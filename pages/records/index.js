@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Head from "next/head";
-import { Table } from "reactstrap";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 
@@ -31,6 +30,9 @@ const recordList = () => {
   const [isSearchModal, setIsSearchModal] = useState(false);
   const searchFormValues = useRecoilValue(recordSearchState);
   const linkStyle = "w-5 mx-2 px-3 rounded-full text-white";
+  const tableRowStyle = "flex h-12 justify-between items-center";
+  const resetButtonStyle =
+    "w-4 h-7 text-xs text-center border-2 border-black rounded-full cursor-pointer pt-1 hover:scale-110";
 
   const getRecords = async (meta) => {
     const sortable = sortItems.filter((item) => item.sort !== null);
@@ -72,7 +74,7 @@ const recordList = () => {
 
   useEffect(() => {
     if (editRecord && !router.query?.method)
-      setListStyle("text-black bg-yellow-100");
+      setListStyle("text-black bg-white");
     else if (editRecord && router.query?.method === "update")
       setListStyle("text-amber-600");
     else if (editRecord && router.query?.method === "store")
@@ -149,10 +151,10 @@ const recordList = () => {
       <div className="pageTitle">記録一覧</div>
       <div className="absolute top-0 right-0">
         <Button
-          text="インポート"
+          text="インポートCSV"
           type="button"
-          color="neutral"
-          width="100px"
+          color="gray"
+          width="150px"
           height="35px"
           onClick={() =>
             router.push({
@@ -177,183 +179,193 @@ const recordList = () => {
           />
         )}
       </div>
-      <div className="flex justify-center">
-        <SearchRecordForm
-          isSearchModal={isSearchModal}
-          setIsSearchModal={setIsSearchModal}
-        />
-      </div>
-
-      <div className="flex justify-center relative mb-2">
-        <ReactPaginate
-          pageCount={Math.ceil(
-            myRecordList.meta.pagination.total /
-              myRecordList.meta.pagination.pageSize
-          )}
-          marginPagesDisplayed={1}
-          pageRangeDisplayed={5}
-          onPageChange={(e) => pageChange(e)}
-          // コンテナ
-          containerClassName="w-1/3 h-10 flex justify-center items-center rounded-full mb-3"
-          // ページ番号
-          pageClassName=""
-          pageLinkClassName={`${linkStyle} bg-gray-700 py-1`}
-          activeClassName="font-weight-bold"
-          activeLinkClassName={`${linkStyle} bg-gray-700 py-1 font-weight-bold text-xl scale-110`}
-          // 次・前
-          previousClassName="mb-0.5"
-          nextClassName="mb-0.5"
-          previousLabel={"<"}
-          previousLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
-          nextLabel={">"}
-          nextLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
-          // その他
-          disabledClassName="disabled" //先頭 or 末尾の設定
-          breakLabel="..." // 数値を表示しない部分
-          breakClassName="mb-0.5"
-          breakLinkClassName={`${linkStyle} bg-gray-700 pb-1`}
-        />
-        <div className="absolute -top-7 right-0">
-          <SelectBox
-            label={["表示数"]}
-            selectableValues={[10, 25, 50, 100, 150, 300, 500]}
-            handleSelect={handleSelect}
-            selectedValue={selectedValue}
-            wrapperStyleProp="w-24 text-md"
-            labelStyleProp="w-full h-8 bg-gray-700 text-white text-center rounded-t-lg pt-1"
-            selectStyleProp="w-full h-8 text-center border-2 border-gray-700 rounded-b-lg focus:outline-none"
+      <div className="flex justify-center mb-5">
+        <div className="w-4/5">
+          <SearchRecordForm
+            isSearchModal={isSearchModal}
+            setIsSearchModal={setIsSearchModal}
           />
         </div>
-        <div className="absolute right-32 flex items-end">
-          <div className="mr-2 font-weight-bold">並替えリセット</div>
-          <div
-            className="w-4 h-7 text-xs text-center border-2 border-black rounded-full cursor-pointer pt-1 hover:scale-110"
-            onClick={() =>
-              setSortItems([
-                { name: "id", sort: null },
-                { name: "date", sort: "desc" },
-                { name: "distance", sort: null },
-                { name: "time", sort: null },
-                { name: "per_time", sort: null },
-                { name: "step", sort: null },
-                { name: "cal", sort: null },
-              ])
-            }
-          ></div>
-        </div>
       </div>
-      {myRecordList?.data.length > 0 && (
-        <div className="border-4 border-gray-400 rounded-xl relative">
-          <div className="absolute top-2.5 right-2">
-            <Button
-              text="集計"
-              type="button"
-              color="orange"
-              width="90px"
-              height="35px"
-              onClick={() =>
-                router.push({
-                  pathname: `/records/total_records`,
-                })
-              }
+      <div className="flex justify-center">
+        <div className="flex justify-center w-4/5 relative mb-2">
+          <ReactPaginate
+            pageCount={Math.ceil(
+              myRecordList.meta.pagination.total /
+                myRecordList.meta.pagination.pageSize
+            )}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={5}
+            onPageChange={(e) => pageChange(e)}
+            // コンテナ
+            containerClassName="w-1/3 h-10 flex justify-center items-center rounded-full mb-3"
+            // ページ番号
+            pageClassName=""
+            pageLinkClassName={`${linkStyle} bg-gray-700 py-1`}
+            activeClassName="font-bold"
+            activeLinkClassName={`${linkStyle} bg-gray-700 py-1 font-bold text-xl scale-110`}
+            // 次・前
+            previousClassName="mb-0.5"
+            nextClassName="mb-0.5"
+            previousLabel={"<"}
+            previousLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
+            nextLabel={">"}
+            nextLinkClassName={`${linkStyle} bg-gray-700 text-center pb-1`}
+            // その他
+            disabledClassName="disabled" //先頭 or 末尾の設定
+            breakLabel="..." // 数値を表示しない部分
+            breakClassName="mb-0.5"
+            breakLinkClassName={`${linkStyle} bg-gray-700 pb-1`}
+          />
+          <div className="absolute -top-7 right-0">
+            <SelectBox
+              label={["表示数"]}
+              selectableValues={[10, 25, 50, 100, 150, 300, 500]}
+              handleSelect={handleSelect}
+              selectedValue={selectedValue}
+              wrapperStyleProp="w-24 text-md"
+              labelStyleProp="w-full h-8 bg-gray-700 text-white text-center rounded-t-lg pt-1"
+              selectStyleProp="w-full h-8 text-center bg-gray-300 border-2 border-gray-700 rounded-b-lg focus:outline-none"
             />
           </div>
-          <Table>
-            <thead className="border-b-4 border-gray-400 rounded-xl">
-              <tr>
-                <th>
-                  ID
-                  <SortButton
-                    column="id"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  日付
-                  <SortButton
-                    column="date"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  距離
-                  <SortButton
-                    column="distance"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  時間
-                  <SortButton
-                    column="time"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  時間／km
-                  <SortButton
-                    column="per_time"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  歩数
-                  <SortButton
-                    column="step"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th>
-                  cal
-                  <SortButton
-                    column="cal"
-                    sortItems={sortItems}
-                    setSortItems={setSortItems}
-                  />
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {myRecordList?.data.length > 0 &&
-                myRecordList.data.map((record) => (
-                  <tr
-                    key={record.id}
-                    onClick={() => {
-                      handleSetRecord(record);
-                    }}
-                    className={editRecord?.id === record.id ? listStyle : ""}
-                  >
-                    <td className="align-middle">{record.id}</td>
-                    <td className="align-middle">{record.date}</td>
-                    <td className="align-middle">{record.distance} km</td>
-                    <td className="align-middle">{record.time}</td>
-                    <td className="align-middle">{record.per_time}</td>
-                    <td className="align-middle">{record.step}</td>
-                    <td className="align-middle">{record.cal}</td>
-                    <td className="w-16 px-0">
-                      <Button
-                        text="削除"
-                        type="submit"
-                        width="40px"
-                        textSize="sm"
-                        onClick={() => deleteRecord(record.id)}
-                        useDefaultClass={false}
-                        classProps="text-rose-500 font-weight-bold align-middle mr-4 hover:scale-110 focus:outline-none"
-                      />
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
+          <div className="absolute right-32 flex items-end">
+            <div className="mr-2 font-bold">並替えリセット</div>
+            <div
+              className={`${resetButtonStyle}`}
+              onClick={() =>
+                setSortItems([
+                  { name: "id", sort: null },
+                  { name: "date", sort: "desc" },
+                  { name: "distance", sort: null },
+                  { name: "time", sort: null },
+                  { name: "per_time", sort: null },
+                  { name: "step", sort: null },
+                  { name: "cal", sort: null },
+                ])
+              }
+            ></div>
+          </div>
         </div>
-      )}
+      </div>
+      <div className="flexCol items-center">
+        {myRecordList?.data.length > 0 && (
+          <div className="w-4/5 border-2 border-gray-700 rounded-xl relative">
+            <div>
+              <div className="border-b-2 border-gray-700">
+                <div className="h-12 flex justify-between items-center font-bold">
+                  <div className="w-24 pl-5 flex justify-start items-center">
+                    ID
+                    <SortButton
+                      column="id"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-32 px-2 flex justify-start items-center">
+                    日付
+                    <SortButton
+                      column="date"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-28 px-2 flex justify-start items-center">
+                    距離
+                    <SortButton
+                      column="distance"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-28 px-2 flex justify-start items-center">
+                    時間
+                    <SortButton
+                      column="time"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-36 px-2 flex justify-start items-center">
+                    時間／km
+                    <SortButton
+                      column="per_time"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-24 px-2 flex justify-start items-center">
+                    歩数
+                    <SortButton
+                      column="step"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-20 pr-5 flex justify-start items-center">
+                    cal
+                    <SortButton
+                      column="cal"
+                      sortItems={sortItems}
+                      setSortItems={setSortItems}
+                    />
+                  </div>
+                  <div className="w-20 flex justify-start mr-4">
+                    <Button
+                      text="集計"
+                      type="button"
+                      color="gray"
+                      width="80px"
+                      height="35px"
+                      onClick={() =>
+                        router.push({
+                          pathname: `/records/total_records`,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                {myRecordList?.data.length > 0 &&
+                  myRecordList.data.map((record, index) => (
+                    <div
+                      key={record.id}
+                      onClick={() => {
+                        handleSetRecord(record);
+                      }}
+                      className={
+                        editRecord?.id === record.id
+                          ? `${tableRowStyle} ${listStyle} border-b-2 border-gray-700`
+                          : index + 1 === myRecordList.data.length
+                          ? tableRowStyle
+                          : `${tableRowStyle} border-b-2 border-gray-700`
+                      }
+                    >
+                      <div className="w-24 pl-5 text-left">{record.id}</div>
+                      <div className="w-32 text-left">{record.date}</div>
+                      <div className="w-28 text-left">{record.distance} km</div>
+                      <div className="w-28 text-left">{record.time}</div>
+                      <div className="w-36 text-left">{record.per_time}</div>
+                      <div className="w-24 text-left">{record.step}</div>
+                      <div className="w-20 text-left">{record.cal}</div>
+                      <div className="w-20">
+                        <Button
+                          text="削除"
+                          type="submit"
+                          width="40px"
+                          textSize="sm"
+                          onClick={() => deleteRecord(record.id)}
+                          useDefaultClass={false}
+                          classProps="text-rose-600 text-md align-middle mr-8 hover:scale-110 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

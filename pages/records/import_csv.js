@@ -153,7 +153,7 @@ const importCsv = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="pageTitle">CSVインポート</div>
-      <div className="w-full flexCol items-center bg-white border-4">
+      <div className="w-4/5 flexCol items-center border-2 border-gray-700 rounded-lg">
         <div className="flex justify-center my-3">
           <input
             id="selectCsv"
@@ -177,7 +177,7 @@ const importCsv = () => {
         <Button
           text="実行"
           type="button"
-          color="neutral"
+          color="gray"
           width="100px"
           height="35px"
           onClick={() => handleSubmit()}

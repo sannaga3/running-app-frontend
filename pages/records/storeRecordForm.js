@@ -87,7 +87,7 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
     <div className="relative w-3/4 flexCol items-center space-y-2 border-2 border-gray-700 rounded-xl mb-5 pt-2">
       <FlashMessage flashMessage={flashMessage} />
       <FormError errors={errors} />
-      <div className="flex space-x-5 font-weight-bold">
+      <div className="flex space-x-5 font-bold">
         <div className="w-[150px] text-center">日付</div>
         <div className="w-[100px] text-center">距離</div>
         <div className="w-[150px] text-center">時間</div>

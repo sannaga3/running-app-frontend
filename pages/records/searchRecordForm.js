@@ -85,7 +85,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
         <div className="relative w-full flexCol items-center space-y-2 border-2 border-gray-700 rounded-xl mb-5 pt-2 z-0">
           <div className="pageSecondTitle mb-2">検索</div>
           <FormError errors={errors} />
-          <div className="flex space-x-5 font-weight-bold">
+          <div className="flex space-x-5 font-bold">
             <div className="w-[50px] text-center"></div>
             <div className="w-[100px] text-center">ID</div>
             <div className="w-[150px] text-center">日付</div>
@@ -98,9 +98,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flexCol items-center">
               <div className="flex content-center space-x-5">
-                <div className="w-[50px] text-lg font-weight-bold mt-1 ml-1">
-                  min
-                </div>
+                <div className="w-[50px] text-lg font-bold mt-1 ml-1">min</div>
                 <Input
                   label="ID"
                   name="id_min"
@@ -173,9 +171,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
                 />
               </div>
               <div className="flex content-center space-x-5">
-                <div className="w-[50px] text-lg font-weight-bold mt-1">
-                  max
-                </div>
+                <div className="w-[50px] text-lg font-bold mt-1">max</div>
                 <Input
                   label="ID"
                   name="date_max"
@@ -264,7 +260,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
             color="primary"
             width="100px"
             height="30px"
-            classProps="absolute border-2 top-0 right-12 border-gray-500 rounded-full text-xs font-weight-bold focus:outline-none hover:scale-105"
+            classProps="absolute border-2 top-0 right-12 border-gray-500 rounded-full text-xs font-bold focus:outline-none hover:scale-105"
             useDefaultClass={false}
             onClick={() => {
               reset();
@@ -284,7 +280,7 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
       ) : (
         <>
           <div className="relative w-full flexCol items-center space-y-2 border-2 border-gray-700 rounded-xl mb-5 z-0">
-            <div className="text-md font-weight-bold">検索</div>
+            <div className="text-md font-bold">検索</div>
             <button
               type="button"
               onClick={() => {

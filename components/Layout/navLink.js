@@ -7,14 +7,21 @@ const navLink = ({
   setActiveTab,
   isLogout = false,
   setUser = null,
+  isShowHamburger = false,
 }) => {
   const router = useRouter();
 
   const commonStyle =
-    "text-xl border-b-4 cursor-pointer hover:scale-110 mt-1 px-2";
-  const normalStyle = `${commonStyle} text-orange-600 hover:text-orange border-orange-600`;
-  const activeStyle = `${commonStyle} text-red-600 border-red-600`;
+    "text-xl border-b-4 cursor-pointer hover:scale-105 py-0.5 px-2";
+  const normalStyle = `${commonStyle} border-gray-600`;
+  const activeStyle = `${commonStyle} border-gray-900 font-bold`;
   const style = tabName === active ? activeStyle : normalStyle;
+
+  const textColor = isShowHamburger
+    ? "text-white"
+    : tabName === active
+    ? "text-gray-900"
+    : "text-gray-600";
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -43,8 +50,13 @@ const navLink = ({
   };
 
   return (
-    <a href={href} value={tabName} onClick={(e) => handleClick(e)}>
-      <label htmlFor="navLink" className={style}>
+    <a
+      href={href}
+      value={tabName}
+      onClick={(e) => handleClick(e)}
+      className={`${style}`}
+    >
+      <label htmlFor="navLink" className={`${textColor}`}>
         {tabName}
       </label>
       <input type="radio" name="navLink" className="hidden" value={tabName} />

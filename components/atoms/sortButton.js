@@ -4,11 +4,9 @@ const sortButton = ({ column, sortItems, setSortItems }) => {
 
   let target = sortItems?.find((item) => item.name === column);
 
-  let sortText = "↓";
+  let sortText = "・";
   if (target?.sort === "desc") sortText = "↓";
   if (target?.sort === "asc") sortText = "↑";
-
-  const sortTextColor = target?.sort === null ? "text-white" : "";
 
   const handleSort = (target) => {
     if (target.name !== column) return;
@@ -24,10 +22,7 @@ const sortButton = ({ column, sortItems, setSortItems }) => {
   };
 
   return (
-    <span
-      className={`${sortButtonStyle} ${sortTextColor}`}
-      onClick={() => handleSort(target)}
-    >
+    <span className={`${sortButtonStyle}`} onClick={() => handleSort(target)}>
       {sortText}
     </span>
   );

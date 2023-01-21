@@ -115,11 +115,11 @@ const signup = () => {
             getValueKey={"パスワード"}
             trigger="password"
           />
-          <div className="mt-5">
+          <div className="pt-10">
             <Button
               text="送信"
               type="submit"
-              color="amber"
+              color="gray"
               width="120px"
               height="35px"
             />

@@ -113,7 +113,7 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
         <FormError errors={errors} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flexCol items-center">
-            <div className="flex space-x-5 font-weight-bold mb-2">
+            <div className="flex space-x-5 font-bold mb-2">
               <div className="w-[150px] text-left">集計タイプ</div>
               <div className="w-[450px] text-left">
                 <RadioButton
@@ -126,7 +126,7 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
               </div>
             </div>
             <div className="flex content-center space-x-5">
-              <div className="w-[150px] font-weight-bold mt-2 ml-1">日付</div>
+              <div className="w-[150px] font-bold mt-2 ml-1">日付</div>
               {totalType === "custom_settings" ? (
                 <div className="w-[450px] flex space-x-5">
                   <Input
@@ -168,8 +168,8 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
                 </>
               )}
             </div>
-            <div className="flex justify-start space-x-5 font-weight-bold mt-1">
-              <div className="w-[150px] text-left">対象カラム</div>
+            <div className="flex justify-start space-x-5 font-bold mt-1">
+              <div className="w-[150px] text-left">集計項目</div>
               <div className="w-[450px] text-left">
                 <CheckBox
                   name="targetColumns"
@@ -180,7 +180,7 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
                 />
               </div>
             </div>
-            <div className="flex justify-start space-x-5 font-weight-bold mt-3 mb-2">
+            <div className="flex justify-start space-x-5 font-bold mt-3 mb-2">
               <div className="w-[150px] text-left">集計オプション</div>
               <div className="w-[450px] text-left">
                 <CheckBox
@@ -209,7 +209,7 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
           color="primary"
           width="100px"
           height="30px"
-          classProps="absolute border-2 top-2 right-2 border-gray-500 rounded-full text-xs font-weight-bold focus:outline-none hover:scale-105"
+          classProps="absolute border-2 top-2 right-2 border-gray-500 rounded-full text-xs font-bold focus:outline-none hover:scale-105"
           useDefaultClass={false}
           onClick={() => {
             reset();

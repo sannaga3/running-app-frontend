@@ -17,10 +17,10 @@ const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
   let selectedList;
 
   const totalTableStyle =
-    "w-[150px] text-right font-weight-bold border-dashed border-b-2 border-gray-600";
+    "w-[150px] text-right font-bold border-dashed border-b-2 border-gray-600";
 
   const selectBoxStyle =
-    "w-full h-6 text-center border-2 border-gray-700 rounded-lg focus:outline-none";
+    "w-full h-6 text-center border-2 border-gray-700 rounded-lg bg-gray-300 focus:outline-none";
 
   const convertHeader = (key) => {
     let converted;
@@ -78,10 +78,10 @@ const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
 
   return (
     <div className="flexCol items-center border-2 border-gray-700 rounded-xl mb-5 pt-2">
-      <div className="text-xl font-weight-bold my-2">集計結果</div>
-      <div className="flex justify-center items-center space-x-10 mb-3">
+      <div className="text-xl font-bold my-2">集計結果</div>
+      <div className="flex justify-center items-center space-x-10">
         <div className="flexCol items-center mb-3">
-          <div className="text-xl font-weight-bold my-2">期間</div>
+          <div className="text-xl font-bold my-2">期間</div>
           <div className="flex space-x-7 items-center text-lg border-dashed border-b-2 border-gray-600">
             <div>{totalRecordList[0].date}</div>
             <div>~</div>
@@ -94,7 +94,7 @@ const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
         </div>
         <div className="flex items-center p-2">
           <div className="flexCol items-center space-y-3 mb-5 mt-3">
-            <div className={`${totalTableStyle} text-white`}>カラム</div>
+            <div className={`${totalTableStyle} text-gray-800`}>集計項目</div>
             {formValues.targetColumns.map((column) => (
               <div className={`${totalTableStyle}`} key={column}>
                 {convertColumnValue(column)}
@@ -133,14 +133,14 @@ const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
           ))}
         </div>
       </div>
-      <div className="text-xl font-weight-bold mb-3">集計詳細</div>
+      <div className="text-xl font-bold mb-4">集計詳細</div>
       <div className="flex space-x-5 mb-3">
         <div className="w-[200px] border-b-2 border-gray-600">
-          <span className="font-weight-bold mr-3 pb-1">対象カラム:</span>
+          <span className="font-bold mr-3 pb-1">集計項目:</span>
           {convertColumnValue(selectedColumn) ?? "未選択"}
         </div>
         <div className="w-[200px]  border-b-2 border-gray-600">
-          <span className="font-weight-bold mr-3 pb-1">対象オプション:</span>
+          <span className="font-bold mr-3 pb-1">集計オプション:</span>
           {convertHeader(selectedOption) ?? "未選択"}
         </div>
         <div className="flex space-x-3 border-b-2 border-gray-600 pb-1">
@@ -176,6 +176,7 @@ const totalResult = ({ totalRecordList, dataArr, checkableTargetColumns }) => {
                 columns={recordColumns}
                 records={selectedList}
                 selectedColumn={selectedColumn}
+                limit={limit}
               />
             ) : (
               <>

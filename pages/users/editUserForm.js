@@ -117,7 +117,7 @@ const editUserForm = ({ isEdit, setIsEdit }) => {
           getValueKey={"パスワード"}
           trigger="password"
         />
-        <div className="mt-5 space-x-5">
+        <div className="pt-10 space-x-5">
           <Button
             text="送信"
             type="submit"

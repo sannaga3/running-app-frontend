@@ -1,15 +1,17 @@
 import { React, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 
 import NavLink from "./navLink";
 import { userState } from "../../states/auth";
+import { activeRouteState } from "../../states/route";
 
 const header = () => {
-  const [activeTab, setActiveTab] = useState("login");
-  const [isHamburger, setIsHamburger] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(null);
-  const user = useRecoilValue(userState);
-  const setUser = useSetRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
+  const [activeTab, setActiveTab] = useRecoilState(
+    activeRouteState ?? "ログイン"
+  );
+  const [isHamburger, setIsHamburger] = useState(window.innerWidth < 768);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   globalThis.window?.addEventListener(
     "resize",
@@ -18,15 +20,14 @@ const header = () => {
     },
     true
   );
-
-  windowWidth < 768 === false ? "hidden" : "flex flex-col";
+  const isShowHamburger = isHamburger && windowWidth < 768;
 
   return (
-    <header className="py-2 border-b-2 border-orange-600">
+    <header className="py-2 border-b-2 border-gray-700">
       <div className="flex flex-row justify-between items-center px-12 md:justify-around md:px-0">
-        <div className="animate-rotateY border-2 border-orange-600 rounded-full shadow-xl bg-white">
-          <div className="border-2 bg-orange-600 rounded-full p-2">
-            <a href={`${user.id ? `/user/${user.id}` : "/login"}`}>
+        <div className="animate-rotateY border-2 border-gray-700 rounded-full shadow-xl bg-white">
+          <div className="border-2 bg-gray-700 rounded-full p-2">
+            <a href={`${user.id ? `/users/${user.id}` : "/login"}`}>
               <div className="text-white text-lg w-32 h-1 mb-6 ml-4">
                 running-app
               </div>
@@ -35,18 +36,18 @@ const header = () => {
         </div>
 
         <div
-          className="w-8 h-8 border-2 border-orange-600 rounded-md flex flex-col justify-center items-center mt-1 md:hidden hover:cursor-pointer"
+          className="w-8 h-8 border-2 border-gray-700 rounded-md flex flex-col justify-center items-center mt-1 md:hidden hover:cursor-pointer"
           onClick={() => setIsHamburger(!isHamburger)}
         >
           <div className="mb-4 pb-2 mt-0.5">
-            <div className="w-5 h-1 text-center text-orange-600 pb-2">__</div>
-            <div className="w-5 h-1 text-center text-orange-600 pb-2">__</div>
-            <div className="w-5 h-1 text-center text-orange-600 pb-2">__</div>
+            <div className="w-5 h-1 text-center text-gray-600 pb-2">__</div>
+            <div className="w-5 h-1 text-center text-gray-600 pb-2">__</div>
+            <div className="w-5 h-1 text-center text-gray-600 pb-2">__</div>
           </div>
         </div>
-        {(isHamburger || windowWidth > 768) && (
+        {(isShowHamburger || windowWidth >= 768) && (
           <div
-            className={`absolute flex flex-col top-14 right-20 bg-gray-800 rounded-md opacity-70 text-white space-y-3 pt-2 px-5 z-50 md:flex-row md:space-x-16 md:space-y-0 md:static md:text-black md:bg-inherit`}
+            className={`absolute flex flex-col top-14 right-20 bg-gray-800 rounded-md opacity-70 space-y-3 pt-2 px-5 z-50 md:flex-row md:space-x-16 md:space-y-0 md:static md:bg-inherit md:opacity-100`}
           >
             {user.id ? (
               <>
@@ -55,12 +56,14 @@ const header = () => {
                   tabName="プロフィール"
                   active={activeTab}
                   setActiveTab={setActiveTab}
+                  isShowHamburger={isShowHamburger}
                 />
                 <NavLink
                   href="/records"
                   tabName="記録一覧"
                   active={activeTab}
                   setActiveTab={setActiveTab}
+                  isShowHamburger={isShowHamburger}
                 />
                 <NavLink
                   href="/login"
@@ -69,6 +72,7 @@ const header = () => {
                   setActiveTab={setActiveTab}
                   isLogout={true}
                   setUser={setUser}
+                  isShowHamburger={isShowHamburger}
                 />
               </>
             ) : (
@@ -78,12 +82,14 @@ const header = () => {
                   tabName="ログイン"
                   active={activeTab}
                   setActiveTab={setActiveTab}
+                  isShowHamburger={isShowHamburger}
                 />
                 <NavLink
                   href="/signup"
                   tabName="サインアップ"
                   active={activeTab}
                   setActiveTab={setActiveTab}
+                  isShowHamburger={isShowHamburger}
                 />
               </>
             )}

@@ -11,7 +11,7 @@ const selectBox = ({
   optionStyleProp = null,
 }) => {
   const labelStyle = labelStyleProp ?? "border-b-2 border-gray-600";
-  const selectStyle = selectStyleProp ?? "w-full";
+  const selectStyle = selectStyleProp ?? "w-full bg-gray-300";
   const optionStyle = optionStyleProp ?? "focus:outline-none";
 
   const handleDisabled = (column) => {

@@ -30,7 +30,7 @@ const input = ({
     >
       {!isNotLabel && (
         <label
-          className={labelClassProp ? labelClassProp : "text-lg mt-0.5"}
+          className={labelClassProp ? labelClassProp : "text-lg mt-3.5"}
           style={labelWidth}
         >
           {label}
@@ -60,7 +60,11 @@ const input = ({
         min={min}
         max={max}
         step={step}
-        className={inputClassProp ? inputClassProp : "input mb-3"}
+        className={
+          inputClassProp
+            ? inputClassProp
+            : "input mb-3 outline outline-1 outline-gray-500"
+        }
         style={inputWidth}
       />
     </div>

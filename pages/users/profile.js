@@ -13,7 +13,7 @@ const profile = ({ isEdit, setIsEdit }) => {
   const [error, setError] = useState(null);
 
   const contentAreaStyle =
-    "flex justify-center space-x-10 border-b-4 border-gray-400 px-20 py-2";
+    "flex justify-center space-x-10 border-b-2 border-gray-700 px-20 py-2";
   const contentWidth = { width: "200px" };
 
   const deleteUser = async () => {
@@ -49,7 +49,7 @@ const profile = ({ isEdit, setIsEdit }) => {
         <FlashMessage flashMessage={error ?? router.query} />
       </div>
       <div className="flex justify-center space-x-8">
-        <div className="flexCol items-center space-y-5 text-xl font-bold text-gray-500">
+        <div className="flexCol items-center space-y-5 text-xl font-bold text-gray-700">
           <div className={contentAreaStyle}>
             <div style={contentWidth}>名前 : </div>
             <div style={contentWidth}>{user.username}</div>

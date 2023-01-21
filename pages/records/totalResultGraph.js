@@ -43,7 +43,7 @@ const totalResultGraph = ({ records, selectedColumn }) => {
         top: 40,
         right: 40,
         left: 50,
-        bottom: 40,
+        bottom: 60,
       }}
       unit={convertSelectedColumnToUnit(selectedColumn)}
     >

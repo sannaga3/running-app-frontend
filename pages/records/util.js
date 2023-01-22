@@ -40,9 +40,9 @@ export const sortRecord = (recordList, sortParams) => {
       }
       if (param.name === "date") {
         if (param.sort === "asc")
-          return new Date(a.date) - new Date(b.date) ? 1 : -1;
-        if (param.sort === "desc")
           return new Date(a.date) - new Date(b.date) ? -1 : 1;
+        if (param.sort === "desc")
+          return new Date(a.date) - new Date(b.date) ? 1 : -1;
       }
       if (param.name === "distance") {
         if (param.sort === "asc") return a.distance > b.distance ? 1 : -1;

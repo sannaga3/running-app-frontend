@@ -12,9 +12,13 @@ const sortButton = ({ column, sortItems, setSortItems }) => {
     if (target.name !== column) return;
 
     let changedSort;
-    if (target.sort === "desc") changedSort = "asc";
-    else if (target.sort === "asc") changedSort = null;
-    else if (target.sort === null) changedSort = "desc";
+    if (target.name === "date") {
+      changedSort = target.sort === "desc" ? "asc" : "desc";
+    } else {
+      if (target.sort === "desc") changedSort = "asc";
+      else if (target.sort === "asc") changedSort = null;
+      else if (target.sort === null) changedSort = "desc";
+    }
 
     const newParams = sortItems.filter((item) => item.name !== column);
 

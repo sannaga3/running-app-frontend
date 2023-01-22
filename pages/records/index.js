@@ -8,6 +8,7 @@ import {
   myRecordListState,
   recordSortState,
   recordSearchState,
+  sortDefaultState,
 } from "../../states/record";
 import { destroyRecord, getMyRecordList } from "../api/record";
 import { userState } from "../../states/auth";
@@ -25,7 +26,9 @@ const recordList = () => {
   const [myRecordList, setMyRecordList] = useRecoilState(myRecordListState);
   const [editRecord, setEditRecord] = useState(null);
   const [listStyle, setListStyle] = useState(null);
-  const [selectedValue] = useState(myRecordList.meta.pagination.pageSize ?? 25);
+  const [selectedPageSize] = useState(
+    myRecordList.meta.pagination.pageSize ?? 25
+  );
   const [sortItems, setSortItems] = useRecoilState(recordSortState);
   const [isSearchModal, setIsSearchModal] = useState(false);
   const searchFormValues = useRecoilValue(recordSearchState);
@@ -35,7 +38,7 @@ const recordList = () => {
     "w-4 h-7 text-xs text-center border-2 border-black rounded-full cursor-pointer pt-1 hover:scale-110";
 
   const getRecords = async (meta) => {
-    const sortable = sortItems.filter((item) => item.sort !== null);
+    const existSortParams = sortItems.filter((item) => item.sort !== null);
 
     const formValuesArr = Object.entries(searchFormValues).map(
       ([key, value]) => ({
@@ -44,15 +47,15 @@ const recordList = () => {
       })
     );
 
-    const existValueParams = formValuesArr.filter(
-      (item) => item.value !== null
+    const existSearchParams = formValuesArr.filter(
+      (item) => item.value !== null && item.value !== ""
     );
 
     const res = await getMyRecordList(
       user.id,
       meta,
-      sortable,
-      existValueParams
+      existSortParams,
+      existSearchParams
     );
 
     if (res.error) {
@@ -68,7 +71,8 @@ const recordList = () => {
   useEffect(() => {
     getRecords({
       page: 1,
-      pageSize: myRecordList.meta.pagination.pageSize,
+      pageSize:
+        myRecordList.length > 0 ? myRecordList.meta.pagination.pageSize : 25,
     });
   }, [sortItems, searchFormValues]);
 
@@ -136,7 +140,7 @@ const recordList = () => {
   const handleSelect = (e) => {
     const meta = {
       page: 1,
-      pageSize: Number(pageSize),
+      pageSize: Number(e),
     };
     getRecords(meta, sortItems);
   };
@@ -222,7 +226,7 @@ const recordList = () => {
               label={["表示数"]}
               selectableValues={[10, 25, 50, 100, 150, 300, 500]}
               handleSelect={handleSelect}
-              selectedValue={selectedValue}
+              selectedValue={selectedPageSize}
               wrapperStyleProp="w-24 text-md"
               labelStyleProp="w-full h-8 bg-gray-700 text-white text-center rounded-t-lg pt-1"
               selectStyleProp="w-full h-8 text-center bg-gray-300 border-2 border-gray-700 rounded-b-lg focus:outline-none"
@@ -232,17 +236,7 @@ const recordList = () => {
             <div className="mr-2 font-bold">並替えリセット</div>
             <div
               className={`${resetButtonStyle}`}
-              onClick={() =>
-                setSortItems([
-                  { name: "id", sort: null },
-                  { name: "date", sort: "desc" },
-                  { name: "distance", sort: null },
-                  { name: "time", sort: null },
-                  { name: "per_time", sort: null },
-                  { name: "step", sort: null },
-                  { name: "cal", sort: null },
-                ])
-              }
+              onClick={() => setSortItems(sortDefaultState)}
             ></div>
           </div>
         </div>

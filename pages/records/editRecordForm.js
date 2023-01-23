@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import ReactPaginate from "react-paginate";
 
 import Input from "../../components/atoms/input";
 import Button from "../../components/atoms/button";
@@ -9,7 +8,7 @@ import FormError from "../../components/messages/formError";
 import FlashMessage from "../../components/messages/flashMessage";
 import { myRecordListState } from "../../states/record";
 import { editRecord } from "../api/record";
-import { calcPerKmTime } from "./util";
+import { calcPerKmTime, timeConvertToSecond } from "./util";
 
 const editRecordForm = ({
   record,
@@ -62,6 +61,8 @@ const editRecordForm = ({
       step: step,
       cal: cal,
       user_id: record.user_id,
+      time_second: timeConvertToSecond(time),
+      per_time_second: timeConvertToSecond(per_time),
     };
 
     const fetched = await editRecord(params, record.id);
@@ -73,11 +74,11 @@ const editRecordForm = ({
       });
     }
 
-    const index = myRecordList.data.findIndex(
+    const index = myRecordList.results.findIndex(
       (record) => record.id === fetched.data.id
     );
     const CopiedRecordList = structuredClone(myRecordList);
-    CopiedRecordList.data.splice(index, 1, fetched.data);
+    CopiedRecordList.results.splice(index, 1, fetched.data);
 
     setMyRecordList(CopiedRecordList);
 

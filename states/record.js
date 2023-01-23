@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import persistAtom from "./persist";
+import dayjs from "dayjs";
 
 export const myRecordListState = atom({
   key: "myRecordListState",
@@ -17,23 +18,19 @@ export const sortDefaultState = [
   { name: "id", sort: null },
   { name: "date", sort: "desc" },
   { name: "distance", sort: null },
-  { name: "time", sort: null },
-  { name: "per_time", sort: null },
+  { name: "time_second", sort: null },
+  { name: "per_time_second", sort: null },
   { name: "step", sort: null },
   { name: "cal", sort: null },
 ];
 
 export const recordSortState = atom({
   key: "recordSortState",
-  default: {
-    ...sortDefaultState,
-  },
+  default: [...sortDefaultState],
   effects_UNSTABLE: [persistAtom],
 });
 
 export const searchDefaultState = {
-  id_min: null,
-  id_max: null,
   date_min: null,
   date_max: null,
   distance_min: null,
@@ -58,14 +55,15 @@ export const recordSearchState = atom({
 
 export const defaultTotalFormState = {
   totalPeriodType: "per_month",
-  date_min: null,
+  date_min: dayjs().format("YYYY-MM-DD"),
   date_max: null,
   targetColumns: ["date"],
   options: [],
+  limit: 5,
 };
 
 export const recordTotalFormState = atom({
-  key: "recordTotalState",
+  key: "recordTotalFormState",
   default: {
     ...defaultTotalFormState,
   },

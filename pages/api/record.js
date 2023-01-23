@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { sortRecord } from "../records/util";
 import dayjs from "dayjs";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -15,45 +14,33 @@ export const getMyRecordList = async (
 ) => {
   const token = Cookies.get("token");
 
-  let searchQuery = "";
-  if (searchParams) {
-    searchParams.forEach((param) => {
-      const column = param.key;
+  const params = {
+    sortParams: sortParams,
+    searchParams: searchParams,
+    userId: userId,
+    meta: meta,
+  };
 
-      searchQuery =
-        searchQuery +
-        `&filters[${column.slice(0, -4)}]
-        [${param.key.includes("min") ? "$gte" : "$lte"}]=${param.value}`;
-    });
-  }
-
-  const url =
-    searchQuery === ""
-      ? `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=date%3Adesc`
-      : `${API_URL}/api/records?filters[user_id][$eq]=${userId}&pagination[page]=${meta.page}&pagination[pageSize]=${meta.pageSize}&sort[0]=date%3Adesc${searchQuery}`;
-
-  const res = await fetch(url, {
-    method: "GET",
+  const res = await fetch(`${API_URL}/api/records/findMyRecords`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify({ ...params }),
   });
 
   if (res.ok) {
     let recordList = await res.json();
 
-    const convertedList = recordList.data.map((record) => {
-      const converted = convertRecord(record);
+    const convertedList = recordList.results.map((record) => {
+      let converted = { ...record };
+      converted.time = converted.time.replace(".000", "");
+      converted.per_time = converted.per_time.replace(".000", "");
       return converted;
     });
 
-    if (sortParams.length > 0) {
-      const sortedList = sortRecord(convertedList, sortParams);
-      recordList.data = sortedList;
-    } else {
-      recordList.data = convertedList;
-    }
+    recordList.results = convertedList;
 
     return recordList;
   }

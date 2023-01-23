@@ -25,8 +25,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
 
   const onSubmit = async () => {
     let [
-      id_min,
-      id_max,
       date_min,
       date_max,
       distance_min,
@@ -40,8 +38,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
       cal_min,
       cal_max,
     ] = getValues([
-      "id_min",
-      "id_max",
       "date_min",
       "date_max",
       "distance_min",
@@ -60,8 +56,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
     if (date_max === "") date_max = null;
 
     const newFormValue = {
-      id_min: id_min ? Number(id_min) : null,
-      id_max: id_max ? Number(id_max) : null,
       date_min: date_min,
       date_max: date_max,
       distance_min: distance_min ? Number(distance_min) : null,
@@ -87,7 +81,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
           <FormError errors={errors} />
           <div className="flex space-x-5 font-bold">
             <div className="w-[50px] text-center"></div>
-            <div className="w-[100px] text-center">ID</div>
             <div className="w-[150px] text-center">日付</div>
             <div className="w-[100px] text-center">距離</div>
             <div className="w-[150px] text-center">時間</div>
@@ -99,16 +92,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
             <div className="flexCol items-center">
               <div className="flex content-center space-x-5">
                 <div className="w-[50px] text-lg font-bold mt-1 ml-1">min</div>
-                <Input
-                  label="ID"
-                  name="id_min"
-                  type="number"
-                  min="0"
-                  register={register}
-                  isNotLabel={true}
-                  required={false}
-                  inputSize="100px"
-                />
                 <Input
                   label="日付"
                   name="date_min"
@@ -172,16 +155,6 @@ const searchRecordForm = ({ isSearchModal, setIsSearchModal }) => {
               </div>
               <div className="flex content-center space-x-5">
                 <div className="w-[50px] text-lg font-bold mt-1">max</div>
-                <Input
-                  label="ID"
-                  name="date_max"
-                  type="number"
-                  min="0"
-                  register={register}
-                  isNotLabel={true}
-                  required={false}
-                  inputSize="100px"
-                />
                 <Input
                   label="日付"
                   name="date_max"

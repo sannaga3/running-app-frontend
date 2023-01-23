@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 import Input from "../../components/atoms/input";
 import Button from "../../components/atoms/button";
@@ -9,8 +10,7 @@ import FlashMessage from "../../components/messages/flashMessage";
 import { userState } from "../../states/auth";
 import { myRecordListState } from "../../states/record";
 import { storeRecord } from "../api/record";
-import { calcPerKmTime } from "./util";
-import dayjs from "dayjs";
+import { calcPerKmTime, timeConvertToSecond } from "./util";
 
 const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
   const router = useRouter();
@@ -54,6 +54,8 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
       step: Number(step),
       cal: Number(cal),
       user_id: user.id,
+      time_second: timeConvertToSecond(time),
+      per_time_second: timeConvertToSecond(per_time),
     };
 
     const fetched = await storeRecord(params);
@@ -66,8 +68,10 @@ const storeRecordForm = ({ setEditRecord, flashMessage, setFlashMessage }) => {
     }
 
     let CopiedRecordList = structuredClone(myRecordList);
-    CopiedRecordList.data.push(fetched.data);
-    CopiedRecordList.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    CopiedRecordList.results.push(fetched.data);
+    CopiedRecordList.results.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
 
     setMyRecordList(CopiedRecordList);
     setEditRecord(fetched.data);

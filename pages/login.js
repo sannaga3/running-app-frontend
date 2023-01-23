@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
@@ -17,7 +17,11 @@ const login = () => {
   const [user, setUser] = useRecoilState(userState);
   const [flashMessage, setFlashMessage] = useState(null);
 
-  if (!user.id) Cookies.remove("token");
+  useEffect(() => {
+    if (!user.id) {
+      Cookies.remove("token");
+    }
+  }, []);
 
   const {
     register,

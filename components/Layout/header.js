@@ -1,12 +1,12 @@
 import { React, useState } from "react";
-import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import NavLink from "./navLink";
 import { userState } from "../../states/auth";
 import { activeRouteState } from "../../states/route";
 
 const header = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   const [activeTab, setActiveTab] = useRecoilState(
     activeRouteState ?? "ログイン"
   );
@@ -71,7 +71,6 @@ const header = () => {
                   active={activeTab}
                   setActiveTab={setActiveTab}
                   isLogout={true}
-                  setUser={setUser}
                   isShowHamburger={isShowHamburger}
                 />
               </>

@@ -1,4 +1,18 @@
 import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
+import { userState } from "../../states/auth";
+import {
+  myRecordListState,
+  failureRowListState,
+  recordSortState,
+  recordSearchState,
+  recordTotalFormState,
+  totalRecordListState,
+  totalResultState,
+  sortDefaultState,
+  searchDefaultState,
+  defaultTotalFormState,
+} from "../../states/record";
 
 const navLink = ({
   tabName,
@@ -6,10 +20,17 @@ const navLink = ({
   href = "#",
   setActiveTab,
   isLogout = false,
-  setUser = null,
   isShowHamburger = false,
 }) => {
   const router = useRouter();
+  const setUser = useSetRecoilState(userState);
+  const setMyRecordListStat = useSetRecoilState(myRecordListState);
+  const setFailureRowList = useSetRecoilState(failureRowListState);
+  const setRecordSort = useSetRecoilState(recordSortState);
+  const setRecordSearchState = useSetRecoilState(recordSearchState);
+  const setRecordTotalForm = useSetRecoilState(recordTotalFormState);
+  const setTotalRecordList = useSetRecoilState(totalRecordListState);
+  const setTotalResult = useSetRecoilState(totalResultState);
 
   const commonStyle =
     "text-xl border-b-4 cursor-pointer hover:scale-105 py-0.5 px-2";
@@ -33,6 +54,13 @@ const navLink = ({
           username: null,
           email: null,
         });
+        setMyRecordListStat([]);
+        setFailureRowList([]);
+        setRecordSort(sortDefaultState);
+        setRecordSearchState(searchDefaultState);
+        setRecordTotalForm(defaultTotalFormState);
+        setTotalRecordList([]);
+        setTotalResult([]);
 
         return router.push({
           pathname: `/login`,

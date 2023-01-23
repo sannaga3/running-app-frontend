@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import dayjs from "dayjs";
 
 import Input from "../../components/atoms/input";
 import Button from "../../components/atoms/button";
@@ -68,7 +69,7 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
     handleSubmit,
     formState: { errors },
     getValues,
-    reset,
+    setValue,
   } = useForm({
     defaultValues: {
       ...formValues,
@@ -204,6 +205,40 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
           </div>
         </form>
         <Button
+          text="条件全選択"
+          type="button"
+          color="primary"
+          width="100px"
+          height="30px"
+          classProps="absolute border-2 top-2 right-32 border-gray-500 rounded-full text-xs font-bold focus:outline-none hover:scale-105"
+          useDefaultClass={false}
+          onClick={() => {
+            setFormValues({
+              date_max: formValues?.date_max ?? null,
+              date_min: formValues?.date_min ?? dayjs().format("YYYY-MM-DD"),
+              options: ["total", "average", "max", "min"],
+              targetColumns: ["distance", "time", "per_time", "step", "cal"],
+              totalPeriodType: "per_year",
+              userId: user.id,
+              limit: 5,
+            });
+            setValue(
+              "date_min",
+              formValues?.date_min ?? dayjs().format("YYYY-MM-DD")
+            );
+            setValue("targetColumns", [
+              "distance",
+              "time",
+              "per_time",
+              "step",
+              "cal",
+            ]);
+            setValue("options", ["total", "average", "max", "min"]);
+            setOptions(["total", "average", "max", "min"]);
+            setTargetColumns(["distance", "time", "per_time", "step", "cal"]);
+          }}
+        />
+        <Button
           text="条件リセット"
           type="button"
           color="primary"
@@ -212,8 +247,17 @@ const totalRecordForm = ({ checkableTargetColumns }) => {
           classProps="absolute border-2 top-2 right-2 border-gray-500 rounded-full text-xs font-bold focus:outline-none hover:scale-105"
           useDefaultClass={false}
           onClick={() => {
-            reset();
-            setFormValues({ ...defaultTotalFormState });
+            setFormValues({
+              ...defaultTotalFormState,
+              date_max: formValues?.date_max ?? null,
+              date_min: formValues?.date_min ?? dayjs().format("YYYY-MM-DD"),
+            });
+            setTotalResult([]);
+            setTotalRecordList([]);
+            setOptions([]);
+            setTargetColumns([]);
+            setValue("targetColumns", []);
+            setValue("options", []);
           }}
         />
       </div>

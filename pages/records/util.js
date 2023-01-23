@@ -30,14 +30,18 @@ export const calcPerKmTime = (time, distance) => {
   return perKmTime;
 };
 
+export const timeConvertToSecond = (time) => {
+  const timeArr = time.split(":");
+  const convertedToSecond =
+    Number(timeArr[0]) * 3600 + Number(timeArr[1]) * 60 + Number(timeArr[2]);
+
+  return convertedToSecond;
+};
+
 // 複数条件での並び替え
 export const sortRecord = (recordList, sortParams) => {
   recordList.sort((a, b) => {
     for (const param of sortParams) {
-      if (param.name === "id") {
-        if (param.sort === "asc") return a.id > b.id ? 1 : -1;
-        if (param.sort === "desc") return a.id < b.id ? 1 : -1;
-      }
       if (param.name === "date") {
         if (param.sort === "asc")
           return new Date(a.date) - new Date(b.date) ? -1 : 1;

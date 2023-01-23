@@ -7,7 +7,8 @@ const totalResultRecords = ({ columns, records, selectedColumn, limit }) => {
     return item[1];
   };
 
-  const tableRowStyle = "h-10 flex items-center justify-between";
+  const tableRowStyle =
+    "h-10 flex items-center justify-between border-b-2 border-gray-700";
 
   const cellWidth = (column) => {
     if (column === "id") return "w-20";
@@ -41,12 +42,7 @@ const totalResultRecords = ({ columns, records, selectedColumn, limit }) => {
         {records.map((record, index) => {
           const recordArr = Object.entries(record);
           return (
-            <div
-              key={record.id}
-              className={`${tableRowStyle} ${
-                index + 1 === limit ? "" : "border-b-2 border-gray-700"
-              } ${console.log(index + 1, recordArr.length)}`}
-            >
+            <div key={record.id} className={`${tableRowStyle}`}>
               {recordArr.map((item) => (
                 <div
                   key={item[0]}

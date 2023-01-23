@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 import Button from "../../components/atoms/button";
 import SelectBox from "../../components/atoms/selectBox";
-import { calcPerKmTime } from "./util";
+import { calcPerKmTime, timeConvertToSecond } from "./util";
 import { storeRecord } from "../api/record";
 import { userState } from "../../states/auth";
 import { failureRowListState } from "../../states/record";
@@ -135,6 +135,13 @@ const importCsv = () => {
         step: Number(recordColumnArr[paramIndexObj?.step]) ?? 0,
         cal: Number(recordColumnArr[paramIndexObj?.cal]) ?? 0,
         user_id: user.id,
+        time_second: timeConvertToSecond(recordColumnArr[paramIndexObj.time]),
+        per_time_second: isCheckPerTime
+          ? recordColumnArr[paramIndexObj?.per_time]
+          : Math.floor(
+              timeConvertToSecond(recordColumnArr[paramIndexObj.time]) /
+                Number(recordColumnArr[paramIndexObj.distance])
+            ),
       };
 
       const res = await storeRecord(params);

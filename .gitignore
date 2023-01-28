@@ -9,8 +9,8 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+renderer/.next/
+renderer/out/
 
 # production
 /build
@@ -33,4 +33,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+/main
+/dist
